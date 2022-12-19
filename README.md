@@ -1,0 +1,2 @@
+# squidbot
+Stream Automation Framework
