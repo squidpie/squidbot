@@ -1,5 +1,4 @@
-#ifndef __SERVICE_H__
-#define __SERVICE_H__
+#pragma once
 
 #include <cstdint>
 #include <stdexcept>
@@ -7,6 +6,8 @@
 #include <dlfcn.h>
 #include <iostream>
 #include <system_error>
+
+#include "logging.h"
 
 class ServiceRuntimeError : public std::runtime_error {
 public:
@@ -41,7 +42,7 @@ public:
     void destroy();
 
 protected:
-  bool is_service_loaded() { return (service == NULL); }
+  void need_service();
   std::string name;
   std::string lib_path;
   std::uint_fast64_t guid;
@@ -49,5 +50,3 @@ protected:
   create_t* create_service;
   destroy_t* destroy_service;
 } ServiceContainer_t;
-
-#endif

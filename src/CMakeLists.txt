@@ -13,6 +13,11 @@ target_include_directories(
     services
     services/obs)
 
+target_include_directories(
+    squidbot
+    PUBLIC
+    ${EXTERNAL_LIB_DIR}/plog/include)
+
 target_link_libraries(
     squidbot
     PRIVATE

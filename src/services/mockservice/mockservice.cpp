@@ -2,7 +2,10 @@
 
 void MockService::load() {}
 void MockService::unload() {}
-bool MockService::run() { return true; }
+bool MockService::run() {
+  std::cerr << "DEBUG OUTPUT::mockservice::meow" << std::endl;
+  return true;
+}
 
 // Factory
 extern "C" MockService* create() {

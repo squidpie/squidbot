@@ -6,7 +6,9 @@ add_library(
 target_include_directories(
     mockservice
     PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/services)
+    ${CMAKE_SOURCE_DIR}/src/services
+    ${CMAKE_SOURCE_DIR}/src
+    ${EXTERNAL_LIB_DIR}/plog/include)
 
 set_target_properties(
     mockservice

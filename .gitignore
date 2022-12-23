@@ -46,3 +46,7 @@ _deps
 
 # Output
 targets/
+*.log
+
+# External Libs
+external/

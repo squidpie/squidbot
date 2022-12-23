@@ -13,6 +13,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # export compile database for fleet
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(EXTERNAL_LIB_DIR ${CMAKE_SOURCE_DIR}/external)
+
 # Google Test Stuff
 include(FetchContent)
 FetchContent_Declare(
@@ -47,6 +49,7 @@ target_link_libraries(
 target_include_directories(
     squidtest
     PRIVATE
+    ${EXTERNAL_LIB_DIR}/plog/include
     src src/services src/services/obs)
 
 set_target_properties(
