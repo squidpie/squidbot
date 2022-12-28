@@ -1,8 +1,9 @@
 #include "service.h"
+#include "utils.h"
 
-bool ServiceContainer::run() {
+void ServiceContainer::run() {
   need_service();
-  return service->run();
+  service->run();
 }
 
 void ServiceContainer::gen_lib_path(std::string dir) {
@@ -34,7 +35,8 @@ void ServiceContainer::init() {
 }
 
 void ServiceContainer::create() {
-  service = create_service();
+  service = create_service(context);
+  PLOGD << "service address = " << service;
   need_service();
 }
 

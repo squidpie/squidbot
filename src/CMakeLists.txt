@@ -1,6 +1,8 @@
 # Main Build settings
 set(SOURCE_FILES
-    squidbot.cpp services/service_manager.cpp services/obs/obs.cpp services/service.cpp)
+    squidbot.cpp services/service_manager.cpp services/obs/obs.cpp
+    services/service.cpp events/event_client.cpp
+    events/event_server.cpp)
 
 add_executable(
     squidbot
@@ -11,7 +13,8 @@ target_include_directories(
     PRIVATE
     .
     services
-    services/obs)
+    services/obs
+    events)
 
 target_include_directories(
     squidbot
@@ -21,4 +24,5 @@ target_include_directories(
 target_link_libraries(
     squidbot
     PRIVATE
-    ${CMAKE_DL_LIBS})
+    ${CMAKE_DL_LIBS}
+    Threads::Threads)

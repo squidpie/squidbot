@@ -2,14 +2,13 @@
 
 void MockService::load() {}
 void MockService::unload() {}
-bool MockService::run() {
-  std::cerr << "DEBUG OUTPUT::mockservice::meow" << std::endl;
-  return true;
+void MockService::run() {
+    PLOGD << "Mock Service Running";
 }
 
 // Factory
-extern "C" MockService* create() {
-  auto p = new MockService;
+extern "C" MockService* create(Context_t* context) {
+  auto p = new MockService(context);
   return p;
 }
 

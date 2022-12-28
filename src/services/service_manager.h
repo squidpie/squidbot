@@ -1,5 +1,4 @@
-#ifndef __SERVICE_MANAGER_H__
-#define __SERVICE_MANAGER_H__
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -22,5 +21,3 @@ public:
   protected:
     std::string lib_dir = LIB_DIR;
 };
-
-#endif

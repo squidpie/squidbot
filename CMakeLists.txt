@@ -15,6 +15,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(EXTERNAL_LIB_DIR ${CMAKE_SOURCE_DIR}/external)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 # Google Test Stuff
 include(FetchContent)
 FetchContent_Declare(
@@ -29,10 +32,12 @@ enable_testing()
 
 set(TEST_SOURCE_FILES
     src/squidbot_test.cpp src/services/service_test.cpp src/services/obs/obs_test.cpp
-    src/services/service_manager_test.cpp)
+    src/services/service_manager_test.cpp src/events/events_test.cpp)
 
 set(TEST_IMPL_FILES
-    src/services/obs/obs.cpp src/services/service_manager.cpp src/services/service.cpp)
+    src/services/obs/obs.cpp src/services/service_manager.cpp
+    src/services/service.cpp src/events/event_client.cpp
+    src/events/event_server.cpp)
 
 add_executable(
     squidtest
@@ -50,7 +55,7 @@ target_include_directories(
     squidtest
     PRIVATE
     ${EXTERNAL_LIB_DIR}/plog/include
-    src src/services src/services/obs)
+    src src/services src/services/obs src/events)
 
 set_target_properties(
     squidtest

@@ -1,16 +1,14 @@
-#ifndef __MOCK_SERVICE_H__
-#define __MOCK_SERVICE_H__
+#pragma once
 
 #include "service.h"
 
 class MockService: virtual public ServiceBase {
 public:
-  MockService() { load(); }
+  MockService(Context_t* context) : ServiceBase(context) { load(); }
   ~MockService() { unload(); }
-  bool run();
+  void run();
 
 protected:
   void load();
   void unload();
 };
-#endif
