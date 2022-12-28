@@ -1,13 +1,11 @@
 #include "obs.h"
 #include "events.h"
 
-void OBS::load() {}
+void OBS::load() { buffer_client->subscribe(TEST_EVENT_TYPE); }
 void OBS::unload() {}
 void OBS::run() {
-  PLOGD << "OBS Service Running";
+  PLOGD << "OBS Service Running with client " << buffer_client << std::endl;
   is_running = true;
-  Event sub_event { .type = SUBSCRIBE_EVENT_TYPE, .data = TEST_EVENT_TYPE };
-  buffer_client->send(sub_event);
   while(is_running) {
     Event front_event = buffer_client->receive();
     if (front_event != NULL_EVENT) {

@@ -9,9 +9,9 @@
 const uint_fast64_t NULL_GUID = 0;
 
 enum EventType {
-  NULL_EVENT_TYPE,
-  TEST_EVENT_TYPE,
-  SUBSCRIBE_EVENT_TYPE,
+  NULL_EVENT_TYPE = 0,
+  TEST_EVENT_TYPE = 1,
+  SUBSCRIBE_EVENT_TYPE = 2,
 };
 
 class Event {
@@ -31,7 +31,14 @@ const Event NULL_EVENT = { NULL_GUID, NULL_EVENT_TYPE, NULL_EVENT_TYPE };
 
 typedef std::unordered_map<uint_fast64_t, std::pair<std::mutex*, std::queue<Event>*>> ClientMap_t;
 
-class EventClient {
+class EventClientBase {
+  public:
+  virtual void send(Event) = 0;
+  virtual const Event receive() = 0;
+  virtual void subscribe(EventType) = 0;
+};
+
+class EventClient : public EventClientBase {
   public:
     EventClient(uint_fast64_t guid,
                 std::mutex* qlock,
@@ -47,9 +54,14 @@ class EventClient {
 
 };
 
-class EventServer {
+class EventServerBase {
+  public:
+    virtual EventClientBase* create_client() = 0;
+};
+
+class EventServer : public EventServerBase {
 public:
-  EventClient* create_client();
+  EventClientBase* create_client();
   void run();
   void stop() { is_running = false; }
 

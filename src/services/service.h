@@ -22,6 +22,8 @@ public:
   ServiceBase(Context_t *context) {
     plog::init(plog::debug, context->plog_appender);
     buffer_client = context->buffer_server->create_client();
+    PLOGD << "ServiceBase client = " << buffer_client;
+    PLOGD << "ServiceBase server = " << context->buffer_server;
   }
   virtual ~ServiceBase() {}
   virtual void run() = 0;
@@ -31,7 +33,7 @@ protected:
   virtual void unload() = 0;
 
   bool is_running;
-  EventClient* buffer_client;
+  EventClientBase* buffer_client;
 
 private:
 };

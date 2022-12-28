@@ -5,12 +5,12 @@
 
 #include "events.h"
 
-EventClient* EventServer::create_client() {
+EventClientBase* EventServer::create_client() {
   auto id = get_id();
   auto qlock = new std::mutex;
   auto q = new std::queue<Event>;
   register_q(id, qlock, q);
-  return new EventClient(id, qlock, q);
+  return dynamic_cast<EventClientBase*>(new EventClient(id, qlock, q));
 }
 
 void EventServer::register_q(uint_fast64_t id, std::mutex* qlock, std::queue<Event>* q) {
