@@ -15,8 +15,8 @@ public:
   ServiceManager(std::string lpath) { lib_dir = lpath; }
   ~ServiceManager() {}
   void init();
-  void load(ServiceContainer_t* service);
-  void unload(ServiceContainer_t* service);
+  void load(ServiceContainerBase* service);
+  void unload(ServiceContainerBase* service);
 
   protected:
     std::string lib_dir = LIB_DIR;

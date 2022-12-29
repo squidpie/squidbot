@@ -21,8 +21,8 @@ public:
 
 class ServiceTest: public testing::Test {
   protected:
-    ServiceContainer_t * container_dut;
-    ServiceContainer_t * error_dut;
+    ServiceContainer * container_dut;
+    ServiceContainer * error_dut;
 
     MockEventServer mock_event_server;
     MockEventClient mock_event_client;

@@ -42,9 +42,17 @@ private:
 typedef ServiceBase *create_t(Context_t *);
 typedef void destroy_t(ServiceBase *);
 
-typedef class ServiceContainer {
+class ServiceContainerBase {
+  public:
+    virtual void run() = 0;
+    virtual void gen_lib_path(std::string) = 0;
+    virtual void init() = 0;
+    virtual void create() = 0;
+    virtual void destroy() = 0;
+};
+
+class ServiceContainer : public ServiceContainerBase {
 public:
-  Context_t *context;
   ServiceContainer(std::string _name, Context_t *_context) {
     name = _name;
     context = _context;
@@ -57,10 +65,11 @@ public:
 
 protected:
   void need_service();
+  Context_t *context;
   std::string name;
   std::string lib_path;
   std::uint_fast64_t guid;
   ServiceBase *service;
   create_t *create_service;
   destroy_t *destroy_service;
-} ServiceContainer_t;
+};
