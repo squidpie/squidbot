@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.18.4)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 
 project(Squidbot
         VERSION 1
@@ -18,6 +19,17 @@ set(EXTERNAL_LIB_DIR ${CMAKE_SOURCE_DIR}/external)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
+include_directories(
+    ${EXTERNAL_LIB_DIR}/plog/include
+    ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/framework
+    ${CMAKE_SOURCE_DIR}/src/framework/service ${CMAKE_SOURCE_DIR}/src/framework/events
+    ${CMAKE_SOURCE_DIR}/src/framework/runner ${CMAKE_SOURCE_DIR}/src/services)
+
+add_subdirectory(src/framework)
+add_subdirectory(src)
+#add_subdirectory(src/services/obs)
+add_subdirectory(src/services/mockservice)
+
 # Google Test Stuff
 include(FetchContent)
 FetchContent_Declare(
@@ -30,18 +42,15 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-set(TEST_SOURCE_FILES
-    src/squidbot_test.cpp src/services/service_test.cpp src/services/obs/obs_test.cpp
-    src/services/service_manager_test.cpp src/events/events_test.cpp)
-
-set(TEST_IMPL_FILES
-    src/services/obs/obs.cpp src/services/service_manager.cpp
-    src/services/service.cpp src/events/event_client.cpp
-    src/events/event_server.cpp)
-
 add_executable(
     squidtest
-    ${TEST_SOURCE_FILES} ${TEST_IMPL_FILES})
+    src/squidbot_test.cpp
+    ${FRAMEWORK_TEST_SOURCES})
+
+target_link_libraries(
+    squidtest
+    PUBLIC
+    LIB_FRAMEWORK)
 
 target_link_libraries(
     squidtest
@@ -51,19 +60,9 @@ target_link_libraries(
     gtest_main
     ${CMAKE_DL_LIBS})
 
-target_include_directories(
-    squidtest
-    PRIVATE
-    ${EXTERNAL_LIB_DIR}/plog/include
-    src src/services src/services/obs src/events)
-
 set_target_properties(
     squidtest
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/test"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/test"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/test")
-
-add_subdirectory(src)
-add_subdirectory(src/services/obs)
-add_subdirectory(src/services/mockservice)

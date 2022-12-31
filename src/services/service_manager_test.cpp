@@ -54,7 +54,7 @@ TEST_F(ServiceManagerTest, ServiceManager_run) {
   ASSERT_NO_THROW(mock_container->run());
 }
 
-TEST_F(ServiceManagerTest, ServiceManager_unload) {
+TEST_F(ServiceManagerTest, DISABLED_ServiceManager_unload) {
   ASSERT_NO_THROW(dut.unload(mock_container));
   EXPECT_THROW(mock_container->run(), ServiceRuntimeError);
 }

@@ -1,6 +1,6 @@
 #include "service.h"
 #include "utils.h"
-
+/*
 void ServiceContainer::run() {
   need_service();
   service->run();
@@ -47,4 +47,4 @@ void ServiceContainer::destroy() {
 
 void ServiceContainer::need_service() {
  if (!service) throw ServiceRuntimeError();
-}
+}*/

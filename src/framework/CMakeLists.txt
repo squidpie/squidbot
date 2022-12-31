@@ -1,0 +1,6 @@
+link_directories(runner events service)
+add_subdirectory(runner)
+add_subdirectory(events)
+add_subdirectory(service)
+set(FRAMEWORK_TEST_SOURCES ${RUNNER_TEST_SOURCES} ${EVENTS_TEST_SOURCES} ${SERVICE_TEST_SOURCES} PARENT_SCOPE)
+add_library(LIB_FRAMEWORK ${EVENTS_SOURCES} ${SERVICE_SOURCES})

@@ -9,6 +9,8 @@
 #include "service.h"
 #include "utils.h"
 
+class ServiceContainerBase {};
+
 class ServiceManager: Manager {
 public:
   ServiceManager() {}
