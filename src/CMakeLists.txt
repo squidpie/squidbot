@@ -1,25 +1,15 @@
 # Main Build settings
-set(SOURCE_FILES
-    squidbot.cpp services/service_manager.cpp services/obs/obs.cpp
-    services/service.cpp events/event_client.cpp
-    events/event_server.cpp)
+
+set(SOURCE_FILES squidbot.cpp)
 
 add_executable(
     squidbot
     ${SOURCE_FILES})
 
-target_include_directories(
-    squidbot
-    PRIVATE
-    .
-    services
-    services/obs
-    events)
-
-target_include_directories(
+target_link_libraries(
     squidbot
     PUBLIC
-    ${EXTERNAL_LIB_DIR}/plog/include)
+    LIB_FRAMEWORK)
 
 target_link_libraries(
     squidbot

@@ -1,17 +1,12 @@
 add_library(
     mockservice
     SHARED
-    mockservice.cpp
-    ${CMAKE_SOURCE_DIR}/src/events/event_server.cpp
-    ${CMAKE_SOURCE_DIR}/src/events/event_client.cpp)
+    mockservice.cpp)
 
-target_include_directories(
+target_link_libraries(
     mockservice
-    PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/services
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/events
-    ${EXTERNAL_LIB_DIR}/plog/include)
+    PUBLIC
+    LIB_FRAMEWORK)
 
 set_target_properties(
     mockservice

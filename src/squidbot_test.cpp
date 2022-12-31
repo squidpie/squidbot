@@ -7,23 +7,11 @@
 
 class SquidbotTest: public testing::Test {
 protected:
-
-  const std::string TEST_LIB_DIR = "/home/squidpie/Repos/squidbot/targets/lib/test/";
-  ServiceManager service_manager = ServiceManager(TEST_LIB_DIR);
-  ServiceContainer * service_container;
-  EventServer event_server;
-
   void SetUp() override {
     plog::init(plog::debug, "mock.log");
-    auto context = Context_t {plog::get(), &event_server};
-    service_container = new ServiceContainer("mockservice", &context);
   }
 
 };
 
-TEST_F(SquidbotTest, Squidbot_main) {
-  ASSERT_NO_THROW(service_manager.load(service_container));
-  std::thread mock_thread(&ServiceContainer::run, service_container);
-  mock_thread.join();
-
+TEST_F(SquidbotTest, main) {
 }

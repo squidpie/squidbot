@@ -1,24 +1,30 @@
 #include "squidbot.h"
-#include "service_manager.h"
+#include "service.h"
 
-int main() {
-  plog::init(plog::debug, "squidbot.log"); // make this configurable
+
+class TestRunActionContext : virtual public RunActionContextBase {
+  public:
+  ~TestRunActionContext() {}
+  std::shared_ptr<EventClientBase> event_client;
+};
+
+class TestRunAction : virtual public RunActionBase {
+  public:
+    TestRunAction(std::shared_ptr<TestRunActionContext> _context) {}
+  ~TestRunAction() {}
+  void run_action() { PLOGD << "MEOW"; sleep(5); }
+};
+
+class TestData : virtual public ServiceDataBase {
+  ~TestData() {}
+};
+
+int main(int argc, char** argv) {
+  plog::init(plog::debug, "squidbot.log");
   EventServer event_server;
-
-  EventClient* client_a = dynamic_cast<EventClient*>(event_server.create_client());
-  EventClient* client_b = dynamic_cast<EventClient*>(event_server.create_client());
-  EventClient* client_c = dynamic_cast<EventClient*>(event_server.create_client());
-
-  Context_t context = Context_t { plog::get(), &event_server };
-
-  ServiceManager service_manager;
-  ServiceContainer obs = ServiceContainer("obs", &context);
-  service_manager.load(&obs);
-  std::thread obs_thread(&ServiceContainer::run, obs);
-
-  EventClient* test_client = dynamic_cast<EventClient*>(event_server.create_client());
-  Event stop_obs_event { .type = TEST_EVENT_TYPE };
-  test_client->send(stop_obs_event);
-
-  obs_thread.join();
+  ServiceContext service_context {plog::get(), &event_server};
+  Service<TestRunAction, TestRunActionContext, TestData> s = Service<TestRunAction, TestRunActionContext, TestData>(service_context);
+  s.start();
+  sleep(1);
+  s.stop();
 }

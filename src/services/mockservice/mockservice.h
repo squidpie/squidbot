@@ -1,14 +1,32 @@
 #pragma once
 
-#include "service.h"
+#include "framework.h"
 
-class MockService: virtual public ServiceBase {
+class MockServiceData : virtual public ServiceDataBase {
 public:
-  MockService(Context_t* context) : ServiceBase(context) { load(); }
-  ~MockService() { unload(); }
-  void run();
+  ~MockServiceData() {}
+};
+
+class MockServiceRunActionContext : virtual public RunActionContextBase {
+public:
+  ~MockServiceRunActionContext() {}
+  std::shared_ptr<EventClientBase> event_client;
+  std::shared_ptr<MockServiceData> mock_data;
+};
+
+class MockServiceRunAction : virtual public RunActionBase {
+public:
+  MockServiceRunAction(std::shared_ptr<MockServiceRunActionContext> context) {
+    event_client = context->event_client;
+    mock_data = context->mock_data;
+  }
+  void run_action();
 
 protected:
-  void load();
-  void unload();
+  std::shared_ptr<EventClientBase> event_client;
+  std::shared_ptr<MockServiceData> mock_data;
 };
+
+typedef Service<MockServiceRunAction, MockServiceRunActionContext,
+                MockServiceData>
+    MockService_t;
