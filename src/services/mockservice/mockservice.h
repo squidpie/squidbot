@@ -1,6 +1,6 @@
 #pragma once
 
-#include "framework.h"
+#include "core.h"
 #include "service.h"
 
 class MockServiceData : virtual public ServiceDataBase {
