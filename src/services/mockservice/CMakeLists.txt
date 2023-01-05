@@ -6,7 +6,7 @@ add_library(
 target_link_libraries(
     mockservice
     PUBLIC
-    LIB_FRAMEWORK)
+    LIB_CORE)
 
 set_target_properties(
     mockservice

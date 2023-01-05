@@ -30,11 +30,11 @@ message(STATUS "plog is loaded at " ${LIB_PLOG})
 
 include_directories(
     ${LIB_PLOG}
-    ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/framework
-    ${CMAKE_SOURCE_DIR}/src/framework/service ${CMAKE_SOURCE_DIR}/src/framework/events
-    ${CMAKE_SOURCE_DIR}/src/framework/runner ${CMAKE_SOURCE_DIR}/src/services)
+    ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/core
+    ${CMAKE_SOURCE_DIR}/src/core/service ${CMAKE_SOURCE_DIR}/src/core/events
+    ${CMAKE_SOURCE_DIR}/src/core/runner ${CMAKE_SOURCE_DIR}/src/services)
 
-add_subdirectory(src/framework)
+add_subdirectory(src/core)
 add_subdirectory(src)
 #add_subdirectory(src/services/obs)
 add_subdirectory(src/services/mockservice)
@@ -54,12 +54,12 @@ enable_testing()
 add_executable(
     squidtest
     src/squidbot_test.cpp
-    ${FRAMEWORK_TEST_SOURCES} ${MOCK_SERVICE_SOURCES})
+    ${CORE_TEST_SOURCES} ${MOCK_SERVICE_SOURCES})
 
 target_link_libraries(
     squidtest
     PUBLIC
-    LIB_FRAMEWORK)
+    LIB_CORE)
 
 target_link_libraries(
     squidtest

@@ -9,7 +9,7 @@ add_executable(
 target_link_libraries(
     squidbot
     PUBLIC
-    LIB_FRAMEWORK)
+    LIB_CORE)
 
 target_link_libraries(
     squidbot
