@@ -1,5 +1,9 @@
 #include "mockservice.h"
 
+void MockServicePluginInterface::test()  {
+  PLOGD << "TEST OUTPUT :: MockService test()";
+}
+
 void MockServiceRunAction::run_action() {
   Event rx = event_client->receive();
   if (rx != NULL_EVENT) event_client->send(rx);
@@ -7,16 +11,11 @@ void MockServiceRunAction::run_action() {
 
 // Factory
 extern "C" void create(std::shared_ptr<Context> context) {
-  std::cerr << "DEBUG OUTPUT :: MockService_t create" << std::endl;
+  PLOGD << "MockService_t create" << std::endl;
   auto service_context = std::dynamic_pointer_cast<ServiceContext>(context);
   auto service = std::make_shared<MockService_t>(service_context);
-  std::cerr << "DEBUG OUTPUT :: MockService_t reg" << std::endl;
-  auto cast_service = std::dynamic_pointer_cast<ServiceBase>(service);
-  assert(cast_service != __null);
-  service_context->service_manager->register_service(std::type_index(typeid(MockService)), cast_service);
-  std::cerr << "DEBUG OUTPUT :: MockService_t start" << std::endl;
+  service_context->service_manager->register_service(std::type_index(typeid(MockService)), std::dynamic_pointer_cast<ServiceBase>(service));
   service->start();
-  std::cerr << "DEBUG OUTPUT :: MockService_t construct complete" << std::endl;
 }
 
 extern "C" void destroy(std::unique_ptr<ServiceBase> service) {

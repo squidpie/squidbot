@@ -1,15 +1,6 @@
 #pragma once
-/*
-            Forward Declarations
-    :: WARNING Do Not Change the Ordering ::
 
- */
-
-#include <memory>
-#include <stdexcept>
-#include <system_error>
 #include <typeindex>
-#include <unordered_map>
 
 #include "event_server.h"
 #include "logging.h"

@@ -45,7 +45,7 @@ enable_testing()
 add_executable(
     squidtest
     src/squidbot_test.cpp
-    ${FRAMEWORK_TEST_SOURCES})
+    ${FRAMEWORK_TEST_SOURCES} ${MOCK_SERVICE_SOURCES})
 
 target_link_libraries(
     squidtest

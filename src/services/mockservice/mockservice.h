@@ -13,7 +13,7 @@ public:
   MockServicePluginInterface() {}
   MockServicePluginInterface(std::shared_ptr<MockServiceData> data) : data(data) {  }
   ~MockServicePluginInterface() {}
-  void test()  { std::cerr << "MEOW" << std::endl; }
+  void test();
   protected:
     std::shared_ptr<MockServiceData> data;
 };

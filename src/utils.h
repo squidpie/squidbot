@@ -22,7 +22,7 @@ class Context {
   std::string lib_dir;
 };
 
-template <class L> class LibLoader {
+template <class L> class LibLoader  {
 public:
 
   typedef typename L::create_t create_t;
@@ -33,18 +33,16 @@ public:
   ~LibLoader() {}
 
   void load_all() {
-    std::cerr << "DEBUG OUTPUT :: load_all called" << std::endl;
     for (const auto& entry : fs::directory_iterator(context->lib_dir)) {
       const auto path = entry.path().filename().string();
       if (path.ends_with(".so")) {
         load_lib(context->lib_dir + "/" + path);
       }
     }
-    //std::string lib_dir = context->lib_dir;
   }
 
   void load_lib(std::string lib_path) {
-    std::cerr << "DEBUG OUTPUT :: load_lib called " << lib_path << std::endl;
+    PLOGD << "loading lib " << lib_path;
     void *handle = dlopen(lib_path.c_str(), RTLD_LAZY);
 
     const char *dlsym_error = dlerror();
