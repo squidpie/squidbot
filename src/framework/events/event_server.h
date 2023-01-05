@@ -19,6 +19,7 @@ typedef std::unordered_map<EventType, std::vector<uint_fast64_t>> SubMap_t;
 
 class EventServerRunActionContext : virtual public RunActionContextBase {
 public:
+  EventServerRunActionContext() {}
   EventServerRunActionContext(std::shared_ptr<ClientMap_t> _clients,
                               std::shared_ptr<SubMap_t> _subs)
       : clients(_clients.get()), subs(_subs.get()) {}
@@ -31,11 +32,12 @@ public:
 
 class EventServerRunAction : virtual public RunActionBase {
 public:
-  EventServerRunAction(std::shared_ptr<EventServerRunActionContext> context)
-      : clients(context->clients), subs(context->subs) {}
+  EventServerRunAction(std::shared_ptr<EventServerRunActionContext> _context)
+      : clients(_context->clients), subs(_context->subs) {}
   ~EventServerRunAction() {}
   void run_action();
-
+  typedef EventServerRunActionContext context_t;
+  
 protected:
   void route_event(Event);
   bool is_valid_route_event(uint_fast64_t, Event);
@@ -43,15 +45,18 @@ protected:
 
   ClientMap_t *clients;
   SubMap_t *subs;
+
+  
 };
 
-typedef Runner<EventServerRunAction, EventServerRunActionContext>
+typedef Runner<EventServerRunAction>
     EventServerRunner_t;
 
-typedef RunnerBase<RunActionBase, RunActionContextBase> RunnerBase_t;
+typedef RunnerBase<RunActionBase> RunnerBase_t;
 
 class EventServerBase {
 public:
+  virtual ~EventServerBase() {}
   virtual std::shared_ptr<EventClientBase> create_client() = 0;
 };
 
@@ -67,6 +72,7 @@ public:
                                                       &subscriptions));
     assert(runner != NULL);
   }
+  ~EventServer() {}
   std::shared_ptr<EventClientBase> create_client();
   void start() { runner->start(); };
   void run();
