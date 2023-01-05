@@ -10,87 +10,86 @@
 #include <string>
 #include <system_error>
 #include <thread>
+#include <typeindex>
+#include <typeinfo>
+#include <unordered_map>
 
 #include "event_server.h"
 #include "events.h"
 #include "logging.h"
 #include "runner.h"
+#include "service_loader.h"
+#include "service_manager.h"
+#include "servicelib.h"
 
-struct ServiceContext {
-  plog::IAppender *plog_appender;
-  EventServerBase *event_server;
-};
-
-class ServiceRuntimeError : public std::runtime_error {
+class ServiceInterfaceBase {
 public:
-  ServiceRuntimeError() : std::runtime_error("ServiceRuntimeError") {}
+  ServiceInterfaceBase(...) {}
+  virtual ~ServiceInterfaceBase() {}
 };
-class ServiceLibError : public std::system_error {};
-
-template <class R, class Rc, class D> class Service;
 
 class ServiceDataBase {
 public:
   ServiceDataBase() {}
   virtual ~ServiceDataBase() {}
-  virtual void _init() = 0;
 };
 
 class ServiceBase {
 public:
+  typedef RunActionBase run_action_t;
+  typedef ServiceDataBase data_t;
+  typedef ServiceInterfaceBase plugin_interface_t;
+  typedef ServiceInterfaceBase external_interface_t;
   ServiceBase() {}
   virtual ~ServiceBase() {}
 
   virtual void start() = 0;
   virtual void stop() = 0;
+  virtual std::shared_ptr<ServiceInterfaceBase> get_interface() = 0;
 };
 
-template <class R, class Rc, class D>
-class Service : virtual public ServiceBase {
+template <class S> class Service : virtual public ServiceBase, std::enable_shared_from_this<Service<S>> {
 public:
-  Service() {}
-  Service(ServiceContext context) {
-    PLOGD << "Service Constructor";
-    configure_event_client(context);
-    configure_runner();
-  }
-  ~Service() {}
+  typedef typename S::run_action_t R;
+  typedef typename R::context_t Rc;
+  typedef typename S::data_t D;
+  typedef typename S::plugin_interface_t Pi;
+  typedef typename S::external_interface_t Ei;
 
-  template <class Rprime, class Rcprime, class Dprime>
-  Service<Rprime, Rcprime, Dprime>
-  operator=(const Service<Rprime, Rcprime, Dprime> &right) {
-    Service<Rprime, Rcprime, Dprime> left{};
-    left->inject(right.runner, right.runner_context, right.data);
+  Service() {}
+  Service(std::shared_ptr<ServiceContext> context) {
+    PLOGD << "Service Constructor";
+    auto client = context->event_server->create_client();
+    client->subscribe(TEST_EVENT_TYPE);
+    runner.reset(new Runner<R>(std::make_shared<Rc>(client, data)));
+  }
+  ~Service() {
+    stop();
+  }
+/*
+  template <class Sprime>
+  Service<Sprime> operator=(const Service<Sprime> &right) {
+    Service<Sprime> left{};
+    left->inject(right.runner, right.data);
     return left;
   }
-
+*/
   void start() { runner->start(); }
   void stop() { runner->stop(); }
 
-  void inject(std::shared_ptr<Runner<R, Rc>> _runner,
-              std::shared_ptr<Rc> _run_action_context,
-              std::shared_ptr<D> _data) {
+  std::shared_ptr<ServiceInterfaceBase> get_interface() {
+    std::cerr << "DEBUG OUTPUT :: Service Template creating interface";
+    return std::make_shared<Pi>(data);
+    //return std::dynamic_pointer_cast<ServiceInterfaceBase>(std::make_shared<Pi>(data));
+  }
+
+  void inject(std::shared_ptr<Runner<R>> _runner, std::shared_ptr<D> _data) {
     runner = _runner;
-    runner_context = *_run_action_context;
     data = _data;
   }
 
 protected:
-  Rc runner_context;
-  std::shared_ptr<Runner<R, Rc>> runner;
+  std::shared_ptr<Runner<R>> runner;
   std::shared_ptr<D> data;
-
-private:
-  void configure_event_client(ServiceContext context) {
-    runner_context.event_client = context.event_server->create_client();
-    assert(runner_context.event_client != NULL);
-    runner_context.event_client->subscribe(TEST_EVENT_TYPE);
-  }
-
-  void configure_runner() {
-    runner.reset(new Runner<R, Rc>(std::make_shared<Rc>(runner_context)));
-  }
+  std::shared_ptr<Ei> api;
 };
-
-typedef ServiceBase *create_service_t(ServiceContext *);
-typedef void destroy_service_t(ServiceBase *);

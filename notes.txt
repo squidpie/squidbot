@@ -1,0 +1,12 @@
+that lets you do start<Service>(config), store typeid(Service) somewhere, and then status<Service>() and stop<Service>() can compare typeid(Service) to that of the previous start
+7:27
+
+
+
+VIP10-Month Subscriber (9-Month Badge)GlitchCon 2020He/HimApacheFlame: I think I would want to work on the template type. handler.stop(templateName). Then your handler works out what service(s) it needs to stop
+
+start<Service>(config) :: Called from within service header ::
+store typeid(Service)
+status<Service>() and stop<Service>() can compare typeid(Service) to that of the previous start
+
+yt-dlp

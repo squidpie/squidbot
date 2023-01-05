@@ -15,31 +15,37 @@ public:
 
 class RunActionBase {
 public:
+  typedef RunActionContextBase context_t;
   RunActionBase() {}
   virtual ~RunActionBase() {}
   virtual void run_action() = 0;
 };
 
-template <class R, class Rc> class RunnerBase {
+template <class R> class RunnerBase {
 public:
   virtual ~RunnerBase() {}
   virtual void start() = 0;
   virtual void stop() = 0;
 };
 
-template <class R, class Rc> class Runner : virtual public RunnerBase<R, Rc> {
+template <class R> class Runner : virtual public RunnerBase<R> {
 public:
-  Runner(std::shared_ptr<Rc> context) { run_action = std::make_shared<R>(context); }
+  typedef typename R::context_t Rc;
+  Runner(std::shared_ptr<Rc> context) {
+    run_action = std::make_shared<R>(context);
+  }
   ~Runner() {}
 
   void start() {
     set_running(true);
-    thread_handle = new std::thread(&Runner::thread_loop, this);
+    //thread_handle = new std::thread(&Runner::thread_loop, this);
+    thread_handle = std::make_unique<std::thread>(&Runner::thread_loop, this);
   }
 
   void stop() {
     set_running(false);
-    thread_handle->join();
+    if (thread_handle) thread_handle->join();
+    thread_handle.reset();
   }
 
   void inject(std::shared_ptr<R> _run_action) { run_action = _run_action; }
@@ -61,7 +67,7 @@ private:
     return _is_running;
   }
 
-  std::thread *thread_handle;
+  std::unique_ptr<std::thread> thread_handle;
   std::shared_ptr<R> run_action;
   bool _is_running;
   std::mutex is_running_lock;

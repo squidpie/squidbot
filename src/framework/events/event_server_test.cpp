@@ -9,7 +9,7 @@
 #include "events.h"
 #include "runner.h"
 
-class ServiceTestEventClient : virtual public EventClientBase {
+class ServiceTestMockEventClient : virtual public EventClientBase {
 public:
   MOCK_METHOD(void, subscribe, (EventType));
   MOCK_METHOD(void, send, (Event));
