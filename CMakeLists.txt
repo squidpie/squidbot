@@ -19,8 +19,17 @@ set(EXTERNAL_LIB_DIR ${CMAKE_SOURCE_DIR}/external)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
+include(FetchContent)
+FetchContent_Declare(
+    plog
+    URL https://github.com/SergiusTheBest/plog/archive/refs/heads/master.zip
+)
+FetchContent_Populate(plog)
+set(LIB_PLOG ${plog_SOURCE_DIR}/include)
+message(STATUS "plog is loaded at " ${LIB_PLOG})
+
 include_directories(
-    ${EXTERNAL_LIB_DIR}/plog/include
+    ${LIB_PLOG}
     ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/framework
     ${CMAKE_SOURCE_DIR}/src/framework/service ${CMAKE_SOURCE_DIR}/src/framework/events
     ${CMAKE_SOURCE_DIR}/src/framework/runner ${CMAKE_SOURCE_DIR}/src/services)
@@ -31,11 +40,11 @@ add_subdirectory(src)
 add_subdirectory(src/services/mockservice)
 
 # Google Test Stuff
-include(FetchContent)
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/3fa7f983c69f780378b4d1ad44d36030ca951ba6.zip
 )
+
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
