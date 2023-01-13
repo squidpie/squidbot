@@ -16,13 +16,13 @@ protected:
       std::make_shared<ServiceTestEventServer>();
   std::shared_ptr<ServiceTestEventClient> event_client =
       std::make_shared<ServiceTestEventClient>();
-  std::shared_ptr<ServiceContext> context;
+  std::shared_ptr<CoreContext> context;
 
   std::shared_ptr<ServiceManager> dut = std::make_shared<ServiceManager>();
 
 
   void SetUp() override {
-    context = std::make_shared<ServiceContext>(plog::get(), event_server, dut,
+    context = std::make_shared<CoreContext>(plog::get(), event_server, dut,
                                                TEST_LIB_DIR);
 
     EXPECT_CALL(*event_server, create_client())

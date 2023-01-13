@@ -26,7 +26,7 @@ public:
   MOCK_METHOD(void, register_service,
               (std::type_index, std::shared_ptr<ServiceBase>));
 
-  MOCK_METHOD(void, load, (std::shared_ptr<ServiceContext>));
+  MOCK_METHOD(void, load, (std::shared_ptr<CoreContext>));
   void stop_service(std::type_index __i, std::shared_ptr<Service<ServiceBase>> service) {
     service->stop();
     service.reset();

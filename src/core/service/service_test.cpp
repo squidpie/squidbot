@@ -30,7 +30,7 @@ protected:
   void SetUp() override {
 
     plog::init(plog::debug, "mock.log");
-    std::shared_ptr<ServiceContext> context = std::make_shared<ServiceContext>(
+    std::shared_ptr<CoreContext> context = std::make_shared<CoreContext>(
         plog::get(), event_server, service_manager, TEST_LIB_DIR);
 
     run_action_context = std::make_shared<ServiceTestRunActionContext>(

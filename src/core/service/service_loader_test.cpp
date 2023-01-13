@@ -23,7 +23,7 @@ protected:
 };
 
 TEST_F(ServiceLoaderTest, setup) {
-  std::shared_ptr<ServiceContext> context = std::make_shared<ServiceContext>(
+  std::shared_ptr<CoreContext> context = std::make_shared<CoreContext>(
       plog::get(), event_server, service_manager, TEST_LIB_DIR);
 
   EXPECT_CALL(*event_server, create_client())
