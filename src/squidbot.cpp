@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
   plog::init(plog::debug, "squidbot.log");
   auto event_server = std::make_shared<EventServer>();
   std::shared_ptr<ServiceManager> service_manager;
-  std::shared_ptr<ServiceContext> service_context = std::make_shared<ServiceContext>(plog::get(), event_server, service_manager, LIB_DIR);
+  std::shared_ptr<CoreContext> service_context = std::make_shared<CoreContext>(plog::get(), event_server, service_manager, LIB_DIR);
   Service<TestService> s = Service<TestService>(service_context);
   s.start();
   sleep(1);

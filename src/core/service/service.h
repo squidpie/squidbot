@@ -43,7 +43,7 @@ public:
   typedef typename S::external_interface_t Ei;
 
   Service() {}
-  Service(std::shared_ptr<ServiceContext> context) {
+  Service(std::shared_ptr<CoreContext> context) {
     PLOGD << "Service Constructor";
     auto client = context->event_server->create_client();
     client->subscribe(TEST_EVENT_TYPE);

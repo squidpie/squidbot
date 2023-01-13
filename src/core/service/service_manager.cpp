@@ -8,7 +8,7 @@ std::shared_ptr<ServiceInterfaceBase> ServiceManager::get_service_interface(std:
   return services[index]->get_interface();
 }
 
-void ServiceManager::load(std::shared_ptr<ServiceContext> context) {
+void ServiceManager::load(std::shared_ptr<CoreContext> context) {
   std::make_unique<LibLoader<ServiceLoader>>(context);
 }
 

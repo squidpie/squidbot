@@ -19,7 +19,7 @@ public:
   ServiceManager() {}
   ~ServiceManager() {}
 
-  void load(std::shared_ptr<ServiceContext> context);
+  void load(std::shared_ptr<CoreContext> context);
   void register_service(const std::type_index, std::shared_ptr<ServiceBase>);
 
   /*
