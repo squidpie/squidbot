@@ -10,7 +10,7 @@ void MockServiceRunAction::run_action() {
 }
 
 // Factory
-extern "C" void create(std::shared_ptr<Context> context) {
+extern "C" void create(std::string __lib_path, std::shared_ptr<Context> context) {
   PLOGD << "MockService_t create" << std::endl;
   auto service_context = std::dynamic_pointer_cast<ServiceContext>(context);
   auto service = std::make_shared<MockService_t>(service_context);

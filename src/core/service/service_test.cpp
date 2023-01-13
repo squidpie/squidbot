@@ -6,7 +6,7 @@
 #include "service.h"
 #include "service_manager.h"
 #include "servicelib.h"
-#include "utils.h"
+#include "utils/defines.h"
 
 #include "service_test_mock.h"
 

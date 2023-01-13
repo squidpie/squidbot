@@ -4,7 +4,7 @@
 
 #include "event_server.h"
 #include "logging.h"
-#include "utils.h"
+#include "utils/context.h"
 
 class ServiceBase;
 class ServiceInterfaceBase;
@@ -32,7 +32,7 @@ public:
 
 enum ServiceStatus { SERVICE_STATUS_NULL, SERVICE_STATUS_OK };
 
-typedef void (*create_service_t)(std::shared_ptr<Context>);
+typedef void (*create_service_t)(std::string, std::shared_ptr<Context>);
 typedef void (*destroy_service_t)(std::unique_ptr<ServiceBase>);
 
 class ServiceRuntimeError : public std::runtime_error {

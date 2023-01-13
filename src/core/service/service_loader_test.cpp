@@ -5,7 +5,8 @@
 #include "logging.h"
 #include "service_loader.h"
 #include "servicelib.h"
-#include "utils.h"
+#include "utils/lib_loader.h"
+#include "utils/defines.h"
 
 #include "service_test_mock.h"
 

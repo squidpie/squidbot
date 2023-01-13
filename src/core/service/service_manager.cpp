@@ -1,5 +1,6 @@
 #include <typeindex>
 
+#include "utils/lib_loader.h"
 #include "service.h"
 #include "service_manager.h"
 
