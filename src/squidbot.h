@@ -7,3 +7,4 @@
 
 #include "core.h"
 #include "logging.h"
+#include "utils/defines.h"
