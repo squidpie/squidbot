@@ -52,8 +52,6 @@ protected:
 typedef Runner<EventServerRunAction>
     EventServerRunner_t;
 
-typedef RunnerBase<RunActionBase> RunnerBase_t;
-
 class EventServerBase {
 public:
   virtual ~EventServerBase() {}
@@ -75,8 +73,13 @@ public:
   ~EventServer() {}
   std::shared_ptr<EventClientBase> create_client();
   void start() { runner->start(); };
-  void run();
   void stop() { runner->stop(); }
+
+  #ifdef _GTEST_COMPILE
+  auto dump() {
+    return std::make_pair(clients, subscriptions);
+  }
+  #endif
 
 protected:
   void register_q(uint_fast64_t, std::shared_ptr<std::mutex>,
@@ -84,7 +87,7 @@ protected:
 
   uint_fast64_t get_id() { return ++current_id; }
 
-  void debug_dump(uint_fast64_t id, std::mutex *qlock, std::queue<Event> *q) {
+  void debug_dump(uint_fast64_t id, std::shared_ptr<std::mutex> qlock, std::shared_ptr<std::queue<Event>> q) {
     std::cerr << ":: EventServer Dump ::" << std::endl;
     std::cerr << ":: current id = " << id << std::endl;
     std::cerr << ":: current qlock = " << qlock << std::endl;

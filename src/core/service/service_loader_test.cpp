@@ -8,16 +8,16 @@
 #include "utils/lib_loader.h"
 #include "utils/defines.h"
 
-#include "service_test_mock.h"
+#include "mock_core.h"
 
 class ServiceLoaderTest : public testing::Test {
 protected:
-  std::shared_ptr<ServiceTestServiceManager> service_manager =
-      std::make_shared<ServiceTestServiceManager>();
-  std::shared_ptr<ServiceTestEventServer> event_server =
-      std::make_shared<ServiceTestEventServer>();
-  std::shared_ptr<ServiceTestEventClient> event_client =
-      std::make_shared<ServiceTestEventClient>();
+  std::shared_ptr<MockCoreServiceManager> service_manager =
+      std::make_shared<MockCoreServiceManager>();
+  std::shared_ptr<MockCoreEventServer> event_server =
+      std::make_shared<MockCoreEventServer>();
+  std::shared_ptr<MockCoreEventClient> event_client =
+      std::make_shared<MockCoreEventClient>();
 
   std::unique_ptr<LibLoader<ServiceLoader>> dut;
 };

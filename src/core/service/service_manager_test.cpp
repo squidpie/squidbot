@@ -8,14 +8,14 @@
 #include "servicelib.h"
 #include "utils/defines.h"
 
-#include "service_test_mock.h"
+#include "mock_core.h"
 
 class ServiceManagerTest : public testing::Test {
 protected:
-  std::shared_ptr<ServiceTestEventServer> event_server =
-      std::make_shared<ServiceTestEventServer>();
-  std::shared_ptr<ServiceTestEventClient> event_client =
-      std::make_shared<ServiceTestEventClient>();
+  std::shared_ptr<MockCoreEventServer> event_server =
+      std::make_shared<MockCoreEventServer>();
+  std::shared_ptr<MockCoreEventClient> event_client =
+      std::make_shared<MockCoreEventClient>();
   std::shared_ptr<CoreContext> context;
 
   std::shared_ptr<ServiceManager> dut = std::make_shared<ServiceManager>();
@@ -42,5 +42,5 @@ TEST_F(ServiceManagerTest, mockservice_interface) {
 }
 
 TEST_F(ServiceManagerTest, null_interface) {
-  EXPECT_TRUE(dut->get_interface<ServiceTestMockService>() == nullptr);
+  EXPECT_TRUE(dut->get_interface<MockCoreMockService>() == nullptr);
 }

@@ -8,17 +8,11 @@
 
 class EventClientTest : public testing::Test {
 protected:
-  std::unique_ptr<EventClient> dut;
-  std::shared_ptr<std::mutex> q_lock;
-  std::shared_ptr<std::queue<Event>> q;
+  uint_fast64_t id = 1;
+  std::shared_ptr<std::mutex> q_lock = std::make_shared<std::mutex>();
+  std::shared_ptr<std::queue<Event>> q = std::make_shared<std::queue<Event>>();
 
-  void SetUp() override {
-    uint_fast64_t id = 1;
-    q_lock = std::make_shared<std::mutex>();
-    q = std::make_shared<std::queue<Event>>();
-
-    dut = std::make_unique<EventClient>(id, q_lock, q);
-  }
+  std::unique_ptr<EventClient> dut = std::make_unique<EventClient>(id, q_lock, q);
 };
 
 TEST_F(EventClientTest, tx) {
