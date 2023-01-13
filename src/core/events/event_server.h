@@ -52,8 +52,6 @@ protected:
 typedef Runner<EventServerRunAction>
     EventServerRunner_t;
 
-typedef RunnerBase<RunActionBase> RunnerBase_t;
-
 class EventServerBase {
 public:
   virtual ~EventServerBase() {}

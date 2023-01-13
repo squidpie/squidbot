@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18.4)
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -fsanitize=address")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")# -fsanitize=address")
 
 project(Squidbot
         VERSION 1
@@ -75,3 +75,8 @@ set_target_properties(
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/test"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/test"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/test")
+
+target_compile_definitions(
+    squidtest
+    PUBLIC
+    _GTEST_COMPILE)

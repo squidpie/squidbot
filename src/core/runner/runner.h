@@ -21,16 +21,17 @@ public:
   virtual void run_action() = 0;
 };
 
-template <class R> class RunnerBase {
+class RunnerBase {
 public:
   virtual ~RunnerBase() {}
   virtual void start() = 0;
   virtual void stop() = 0;
 };
 
-template <class R> class Runner : virtual public RunnerBase<R> {
+template <class R> class Runner : virtual public RunnerBase {
 public:
   typedef typename R::context_t Rc;
+  Runner() {}
   Runner(std::shared_ptr<Rc> context) {
     run_action = std::make_shared<R>(context);
   }
@@ -48,7 +49,9 @@ public:
     thread_handle.reset();
   }
 
+  #ifdef _GTEST_COMPILE
   void inject(std::shared_ptr<R> _run_action) { run_action = _run_action; }
+  #endif
 
 private:
   void thread_loop() {
