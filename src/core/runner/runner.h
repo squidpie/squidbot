@@ -39,7 +39,6 @@ public:
 
   void start() {
     set_running(true);
-    //thread_handle = new std::thread(&Runner::thread_loop, this);
     thread_handle = std::make_unique<std::thread>(&Runner::thread_loop, this);
   }
 
