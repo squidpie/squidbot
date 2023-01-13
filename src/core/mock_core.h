@@ -43,9 +43,8 @@ public:
 
 class MockCorePluginInterface : virtual public ServiceInterfaceBase {
 public:
-  MockCorePluginInterface() {}
+  MockCorePluginInterface(std::shared_ptr<MockCoreServiceData>) {}
   ~MockCorePluginInterface() {}
-  void test() { std::cerr << "{<[--MEOW--]>}" << std::endl; }
 };
 
 class MockCoreExternalInterface : virtual public ServiceInterfaceBase {
@@ -59,4 +58,6 @@ public:
   typedef MockCoreServiceData data_t;
   typedef MockCorePluginInterface plugin_interface_t;
   typedef MockCoreExternalInterface external_interface_t;
+  MockCoreMockService() {}
+  ~MockCoreMockService() {}
 };
