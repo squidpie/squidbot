@@ -3,6 +3,7 @@
 #include <typeindex>
 
 #include "logging.h"
+#include "service.h"
 #include "service_loader.h"
 #include "servicelib.h"
 
@@ -11,6 +12,11 @@ public:
   virtual ~ServiceManagerBase() {}
   virtual void register_service(std::type_index,
                                 std::shared_ptr<ServiceBase>) = 0;
+  template <class T> std::shared_ptr<typename T::plugin_interface_t> get_interface() {
+    return std::dynamic_pointer_cast<typename T::plugin_interface_t>(_get_interface(std::type_index(typeid(T))));
+  }
+  protected:
+    virtual std::shared_ptr<ServiceInterfaceBase> _get_interface(std::type_index index) = 0;
 };
 
 class ServiceManager : virtual public ServiceManagerBase,
@@ -20,19 +26,20 @@ public:
   ~ServiceManager() {}
 
   void load(std::shared_ptr<CoreContext> context);
-  void register_service(const std::type_index, std::shared_ptr<ServiceBase>);
+  void register_service(const std::type_index, std::shared_ptr<ServiceBase>) override;
 
   /*
   Caller must check for NULL pointer on return
-   */
+
   template <class T>
   std::shared_ptr<typename T::plugin_interface_t> get_interface() {
-    if (!is_service_available(std::type_index(typeid(T)))) {
-      PLOGE << "No Interface found for type <" << typeid(T).name() << ">";
+  */
+  std::shared_ptr<ServiceInterfaceBase> _get_interface(std::type_index index) override {
+    if (!is_service_available(index)) {
+      PLOGE << "No Interface found";
       return nullptr;
     }
-    return std::dynamic_pointer_cast<typename T::plugin_interface_t>(
-        get_service_interface(std::type_index(typeid(T))));
+    return get_service_interface(index);
   };
 
 

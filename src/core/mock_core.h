@@ -44,6 +44,7 @@ public:
   ~MockCoreServiceManager() {}
   MOCK_METHOD(void, register_service,
               (std::type_index, std::shared_ptr<ServiceBase>), (override));
+  MOCK_METHOD(std::shared_ptr<ServiceInterfaceBase>, _get_interface, (std::type_index), (override));
 };
 
 class MockCoreServiceData : virtual public ServiceDataBase {
