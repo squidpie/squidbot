@@ -39,6 +39,7 @@ add_subdirectory(src)
 #add_subdirectory(src/services/obs)
 add_subdirectory(src/services/mockservice)
 add_subdirectory(src/plugins/mockplugin)
+add_subdirectory(src/plugins/admin)
 
 # Google Test Stuff
 FetchContent_Declare(
