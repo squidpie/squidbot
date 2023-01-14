@@ -1,6 +1,8 @@
 #include <gmock/gmock.h>
 
 #include "core.h"
+#include "event_client.h"
+#include "plugin/plugin.h"
 
 class MockCoreRunActionContext : virtual public RunActionContextBase {
 public:
@@ -13,6 +15,14 @@ public:
   MockCoreRunAction(std::shared_ptr<MockCoreRunActionContext> __c) {}
   ~MockCoreRunAction() {}
   MOCK_METHOD(void, run_action, (), (override));
+};
+
+class MockCoreRunner : virtual public RunnerBase {
+  public:
+  MockCoreRunner() {}
+  ~MockCoreRunner() {}
+  MOCK_METHOD(void, start, (), (override));
+  MOCK_METHOD(void, stop, (), (override));
 };
 
 class MockCoreEventClient : public EventClientBase {
@@ -60,4 +70,29 @@ public:
   typedef MockCoreExternalInterface external_interface_t;
   MockCoreMockService() {}
   ~MockCoreMockService() {}
+};
+
+class MockCorePluginAction : virtual public PluginActionBase {
+  public:
+    MockCorePluginAction() {}
+    MockCorePluginAction(InterfaceMap_t*, std::shared_ptr<PluginDataBase>) {}
+    ~MockCorePluginAction() {}
+    MOCK_METHOD(void, trigger_action, (Event), (override));
+};
+
+class MockCorePluginFilter : virtual public PluginFilterBase {
+  public:
+    MockCorePluginFilter() {}
+    ~MockCorePluginFilter() {}
+    MOCK_METHOD(bool, is_trigger, (Event), (override));
+};
+
+class MockCorePlugin {
+  public:
+    typedef MockCorePluginAction action_t;
+    typedef MockCorePluginFilter filter_t;
+    MockCorePlugin() {}
+    MockCorePlugin(std::shared_ptr<EventClientBase>) { /* <Register Event Subscriptions> */ }
+    ~MockCorePlugin() {}
+    InterfaceMap_t create_interfaces(std::shared_ptr<CoreContext>) { /* <Get Interfaces from ServiceManager and load into InterfaceMap_t */ InterfaceMap_t empty; return empty; }
 };

@@ -32,7 +32,7 @@ include_directories(
     ${LIB_PLOG}
     ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/core
     ${CMAKE_SOURCE_DIR}/src/core/service ${CMAKE_SOURCE_DIR}/src/core/events
-    ${CMAKE_SOURCE_DIR}/src/core/runner ${CMAKE_SOURCE_DIR}/src/services)
+    ${CMAKE_SOURCE_DIR}/src/core/runner ${CMAKE_SOURCE_DIR}/src/services ${CMAKE_SOURCE_DIR}/src/core/plugin)
 
 add_subdirectory(src/core)
 add_subdirectory(src)

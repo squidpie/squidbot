@@ -10,7 +10,7 @@
 
 #include "mock_core.h"
 
-class MockCore : public testing::Test {
+class ServiceTest : public testing::Test {
 protected:
   std::shared_ptr<MockCoreEventServer> event_server =
       std::make_shared<MockCoreEventServer>();
@@ -48,4 +48,4 @@ protected:
   void TearDown() override { dut->stop(); }
 };
 
-TEST_F(MockCore, SetUp) { sleep(1); }
+TEST_F(ServiceTest, SetUp) { sleep(1); }
