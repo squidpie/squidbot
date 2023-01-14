@@ -1,7 +1,7 @@
 add_library(
     mockplugin
     SHARED
-    mockplugin.cpp factory.cpp)
+    mockplugin.cpp factory.cpp ${MOCK_SERVICE_SOURCES})
 
 target_link_libraries(
     mockplugin

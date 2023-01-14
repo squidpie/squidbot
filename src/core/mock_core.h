@@ -3,6 +3,7 @@
 #include "core.h"
 #include "event_client.h"
 #include "plugin/plugin.h"
+#include "pluginmanager.h"
 
 class MockCoreRunActionContext : virtual public RunActionContextBase {
 public:
@@ -96,4 +97,13 @@ class MockCorePlugin {
     MockCorePlugin(std::shared_ptr<EventClientBase>) { /* <Register Event Subscriptions> */ }
     ~MockCorePlugin() {}
     InterfaceMap_t create_interfaces(std::shared_ptr<CoreContext>) { /* <Get Interfaces from ServiceManager and load into InterfaceMap_t */ InterfaceMap_t empty; return empty; }
+};
+
+class MockCorePluginManager : virtual public PluginManagerBase {
+public:
+  MockCorePluginManager() {}
+  ~MockCorePluginManager() {}
+  MOCK_METHOD(void, load, (std::shared_ptr<CoreContext>), (override));
+  MOCK_METHOD(void, unload, (), (override));
+  MOCK_METHOD(void, _register_plugin, (std::type_index, (std::pair<std::string, std::shared_ptr<PluginBase>>)), (override));
 };

@@ -16,13 +16,14 @@ protected:
       std::make_shared<MockCoreEventServer>();
   std::shared_ptr<MockCoreEventClient> event_client =
       std::make_shared<MockCoreEventClient>();
+  std::shared_ptr<MockCorePluginManager> plugin_manager = std::make_shared<MockCorePluginManager>();
   std::shared_ptr<CoreContext> context;
 
   std::shared_ptr<ServiceManager> dut = std::make_shared<ServiceManager>();
 
 
   void SetUp() override {
-    context = std::make_shared<CoreContext>(plog::get(), event_server, dut,
+    context = std::make_shared<CoreContext>(plog::get(), event_server, dut, plugin_manager,
                                                TEST_LIB_DIR);
 
     EXPECT_CALL(*event_server, create_client())

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18.4)
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -fPIC")# -fsanitize=address")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -fPIC -fsanitize=address")
 
 project(Squidbot
         VERSION 1
