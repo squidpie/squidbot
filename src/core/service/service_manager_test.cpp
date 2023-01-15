@@ -16,24 +16,29 @@ protected:
       std::make_shared<MockCoreEventServer>();
   std::shared_ptr<MockCoreEventClient> event_client =
       std::make_shared<MockCoreEventClient>();
-  std::shared_ptr<MockCorePluginManager> plugin_manager = std::make_shared<MockCorePluginManager>();
+  std::shared_ptr<MockCorePluginManager> plugin_manager =
+      std::make_shared<MockCorePluginManager>();
   std::shared_ptr<CoreContext> context;
 
   std::shared_ptr<ServiceManager> dut = std::make_shared<ServiceManager>();
-
+  std::shared_ptr<ServiceMap_t> services = std::make_shared<ServiceMap_t>();
 
   void SetUp() override {
-    context = std::make_shared<CoreContext>(plog::get(), event_server, dut, plugin_manager,
-                                               TEST_LIB_DIR);
+    context = std::make_shared<CoreContext>(plog::get(), event_server, dut,
+                                            plugin_manager, TEST_LIB_DIR);
+
+    dut->inject(services);
+
+    EXPECT_CALL(*event_client, receive())
+        .WillRepeatedly(testing::Return(NULL_EVENT));
 
     EXPECT_CALL(*event_server, create_client())
         .WillOnce(testing::Return(event_client));
     EXPECT_CALL(*event_client, subscribe(testing::_));
-    EXPECT_CALL(*event_client, receive())
-        .WillRepeatedly(testing::Return(NULL_EVENT));
     dut->load(context);
+    EXPECT_FALSE(services->empty());
   }
-  void TearDown() override {}
+  void TearDown() override { dut->unload(); }
 };
 
 TEST_F(ServiceManagerTest, mockservice_interface) {
@@ -44,4 +49,23 @@ TEST_F(ServiceManagerTest, mockservice_interface) {
 
 TEST_F(ServiceManagerTest, null_interface) {
   EXPECT_TRUE(dut->get_interface<MockCoreMockService>() == nullptr);
+}
+
+TEST_F(ServiceManagerTest, service_unload_load) {
+  dut->unload_service<MockService>();
+  EXPECT_TRUE(services->empty());
+
+  EXPECT_CALL(*event_server, create_client())
+      .WillOnce(testing::Return(event_client));
+  EXPECT_CALL(*event_client, subscribe(testing::_));
+  dut->load_service("libmockservice.so");
+  EXPECT_FALSE(services->empty());
+}
+
+TEST_F(ServiceManagerTest, service_reload) {
+  EXPECT_CALL(*event_server, create_client())
+      .WillOnce(testing::Return(event_client));
+  EXPECT_CALL(*event_client, subscribe(testing::_));
+  dut->reload_service<MockService>();
+  EXPECT_FALSE(services->empty());
 }
