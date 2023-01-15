@@ -3,8 +3,8 @@
 #include <typeindex>
 
 #include "event_server.h"
-#include "logging.h"
 #include "lib/core_context.h"
+#include "logging.h"
 
 class ServiceBase;
 class ServiceInterfaceBase;
@@ -18,5 +18,5 @@ class ServiceManager;
 typedef void (*create_service_t)(std::string, std::shared_ptr<Context>);
 
 typedef std::unordered_map<std::type_index,
-                           std::shared_ptr<ServiceBase>>
+                           std::pair<std::string, std::shared_ptr<ServiceBase>>>
     ServiceMap_t;
