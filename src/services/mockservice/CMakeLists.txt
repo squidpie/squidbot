@@ -1,7 +1,7 @@
 add_library(
     mockservice
     SHARED
-    mockservice.cpp)
+    mockservice.cpp factory.cpp)
 
 target_link_libraries(
     mockservice

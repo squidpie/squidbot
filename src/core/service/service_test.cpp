@@ -18,6 +18,7 @@ protected:
       std::make_shared<MockCoreEventClient>();
   std::shared_ptr<ServiceManager> service_manager =
       std::make_shared<ServiceManager>();
+  std::shared_ptr<MockCorePluginManager> plugin_manager = std::make_shared<MockCorePluginManager>();
 
   std::shared_ptr<MockCoreRunActionContext> run_action_context =
       std::make_shared<MockCoreRunActionContext>();
@@ -34,7 +35,7 @@ protected:
     plog::init(plog::debug, "mock.log");
 
     std::shared_ptr<CoreContext> context = std::make_shared<CoreContext>(
-        plog::get(), event_server, service_manager, TEST_LIB_DIR);
+        plog::get(), event_server, service_manager, plugin_manager, TEST_LIB_DIR);
 
     runner->inject(run_action);
 

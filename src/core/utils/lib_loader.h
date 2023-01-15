@@ -67,7 +67,7 @@ public:
 
     dlclose(handle);
   }
-
+  
 protected:
   std::shared_ptr<Context> context;
 };
