@@ -15,22 +15,23 @@ protected:
   std::shared_ptr<ServiceInterfaceBase> interface;
 
   std::shared_ptr<PluginManager> dut;
+  std::shared_ptr<PluginMap_t> plugins = std::make_shared<PluginMap_t>();
 
   void SetUp() override {
     dut = std::make_shared<PluginManager>();
     context = std::make_shared<CoreContext>(plog::get(), server, service_manager, dut, TEST_LIB_DIR);
+    dut->inject(plugins);
   }
 
   void TearDown() override { dut->unload(); }
 };
 
 TEST_F(PluginManagerTest, setup) {
-  Event rx = {1, TEST_EVENT_TYPE};
+  Event rx = {0, TEST_EVENT_TYPE};
   EXPECT_CALL(*server, create_client()).WillOnce(testing::Return(client));
   EXPECT_CALL(*client, subscribe(testing::Eq(TEST_EVENT_TYPE))).WillOnce(testing::Return());
   EXPECT_CALL(*service_manager, _get_interface(testing::Eq(std::type_index(typeid(MockService))))).WillOnce(testing::Return(interface));
   EXPECT_CALL(*client, receive()).WillRepeatedly(testing::Return(rx));
   dut->load(context);
-  auto dump = dut->dump();
-  EXPECT_TRUE(dump.size() > 0);
+  EXPECT_TRUE(plugins->size() == 1);
 }

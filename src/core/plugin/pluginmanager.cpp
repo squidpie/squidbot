@@ -5,12 +5,10 @@ void PluginManager::load(std::shared_ptr<CoreContext> context) {
 }
 
 void PluginManager::_register_plugin(std::type_index index, std::pair<std::string, std::shared_ptr<PluginBase>> entry) {
-  plugins.insert({index, entry});
+  plugins->insert({index, entry});
 }
 
 void PluginManager::unload()  {
   lib_loader.reset();
-  for (auto entry = plugins.begin(); entry != plugins.end(); entry++) {
-    entry->second.second.reset();
-  }
+  plugins->clear();
 }

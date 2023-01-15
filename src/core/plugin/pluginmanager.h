@@ -32,10 +32,10 @@ class PluginManager : virtual public PluginManagerBase {
     void _register_plugin(std::type_index, std::pair<std::string, std::shared_ptr<PluginBase>>) override;
 
     #ifdef _GTEST_COMPILE
-    auto dump() { return plugins; }
+    auto inject(auto _plugins) { plugins = _plugins; }
     #endif
 
     protected:
       std::unique_ptr<LibLoader<PluginLoader>> lib_loader;
-      PluginMap_t plugins;
+      std::shared_ptr<PluginMap_t> plugins = std::make_shared<PluginMap_t>();
 };
