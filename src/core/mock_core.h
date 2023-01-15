@@ -106,4 +106,6 @@ public:
   MOCK_METHOD(void, load, (std::shared_ptr<CoreContext>), (override));
   MOCK_METHOD(void, unload, (), (override));
   MOCK_METHOD(void, _register_plugin, (std::type_index, (std::pair<std::string, std::shared_ptr<PluginBase>>)), (override));
+  MOCK_METHOD(void, _unload, (std::type_index));
+  MOCK_METHOD(void, _reload, (std::type_index));
 };

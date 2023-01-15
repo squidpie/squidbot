@@ -12,3 +12,13 @@ void PluginManager::unload()  {
   lib_loader.reset();
   plugins->clear();
 }
+
+void PluginManager::_unload(std::type_index index) {
+  plugins->erase(index);
+}
+
+void PluginManager::_reload(std::type_index index) {
+  auto lib_path = plugins->at(index).first;
+  _unload(index);
+  lib_loader->load_lib(lib_path);
+}
