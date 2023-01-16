@@ -1,4 +1,12 @@
-#include "squidbot.h"
+#include <iostream>
+#include <stdio.h>
+#include <thread>
+#include <vector>
+
+#include "corelib.h"
+#include "logging.h"
+#include "utils/defines.h"
+
 #include "mockservice/mockservice.h"
 
 int main(int argc, char **argv) {

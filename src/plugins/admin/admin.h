@@ -1,6 +1,6 @@
 #pragma once
 
-#include "plugin.h"
+#include "corelib.h"
 #include "mockservice/mockservice.h"
 
 class AdminAction : virtual public PluginActionBase {
@@ -8,9 +8,10 @@ public:
   AdminAction(InterfaceMap_t *interfaces, std::shared_ptr<PluginDataBase>);
   ~AdminAction() {}
   void trigger_action(Event) override;
-  protected:
-    InterfaceMap_t *interfaces;
-    std::shared_ptr<MockServicePluginInterface> mockservice;
+
+protected:
+  InterfaceMap_t *interfaces;
+  std::shared_ptr<MockServicePluginInterface> mockservice;
 };
 
 class AdminFilter : virtual public PluginFilterBase {

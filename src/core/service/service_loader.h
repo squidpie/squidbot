@@ -1,6 +1,6 @@
 #pragma once
 
-#include "servicelib.h"
+#include "core.h"
 
 class ServiceLoader {
 public:

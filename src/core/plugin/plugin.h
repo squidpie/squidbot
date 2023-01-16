@@ -1,15 +1,11 @@
 #pragma once
-#include <initializer_list>
-#include <stdarg.h>
-#include <typeindex>
-#include <unordered_map>
 
-#include "event_client.h"
+#include "core.h"
 #include "event_server.h"
 #include "events.h"
 #include "lib/core_context.h"
+#include "pluginmanager.h"
 #include "runner.h"
-#include "service.h"
 
 typedef std::unordered_map<std::type_index,
                            std::shared_ptr<ServiceInterfaceBase>>
@@ -88,7 +84,7 @@ public:
 
   void start() override { runner->start(); }
   void stop() override { runner->stop(); }
-  void reload() override { std::cerr << "RELOADING PLUGIN" << std::endl; }
+  void reload() override { context->plugin_manager->reload_plugin<P>(); }
   bool is_dependent(std::type_index index) override {
     return (interfaces.find(index) != interfaces.end());
   }

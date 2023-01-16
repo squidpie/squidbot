@@ -1,11 +1,9 @@
 #include <gtest/gtest.h>
 
-#include <thread>
-#include <unistd.h>
-
-#include "pluginmanager.h"
-#include "service_manager.h"
-#include "squidbot.h"
+#include "corelib.h"
+#include "logging.h"
+#include "mockservice/mockservice.h"
+#include "utils/defines.h"
 
 class SquidbotTest : public testing::Test {
 protected:
@@ -32,4 +30,6 @@ protected:
   }
 };
 
-TEST_F(SquidbotTest, main) { sleep(5); }
+TEST_F(SquidbotTest, reload_service) {
+  service_manager->reload_service<MockService>();
+}

@@ -3,11 +3,7 @@
 
 #include "logging.h"
 #include "mockservice/mockservice.h"
-#include "service.h"
-#include "service_manager.h"
-#include "servicelib.h"
 #include "utils/defines.h"
-
 #include "mock_core.h"
 
 class ServiceManagerTest : public testing::Test {

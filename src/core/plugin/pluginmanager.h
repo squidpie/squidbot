@@ -1,11 +1,9 @@
 #pragma once
 
-#include <condition_variable>
-#include <memory>
-#include <typeindex>
+#include <mutex>
+#include <thread>
 
-#include "lib/core_context.h"
-#include "plugin.h"
+#include "core.h"
 #include "pluginloader.h"
 
 typedef std::unordered_map<std::type_index,
@@ -76,5 +74,6 @@ protected:
   void unload_actions(std::type_index);
   void reload_actions(std::type_index);
   void clear_unload_threads();
-  void service_reload_notify(std::shared_ptr<std::mutex>, std::shared_ptr<std::type_index>);
+  void service_reload_notify(std::shared_ptr<std::mutex>,
+                             std::shared_ptr<std::type_index>);
 };

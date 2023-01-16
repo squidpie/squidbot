@@ -1,9 +1,7 @@
 #include <gmock/gmock.h>
 
 #include "core.h"
-#include "event_client.h"
-#include "plugin/plugin.h"
-#include "pluginmanager.h"
+#include "corelib.h"
 
 class MockCoreRunActionContext : virtual public RunActionContextBase {
 public:
@@ -129,5 +127,6 @@ public:
   MOCK_METHOD(void, _reload, (std::type_index), (override));
   MOCK_METHOD(void, service_unload_notify, (std::type_index), (override));
   MOCK_METHOD(std::thread, service_reload_warn,
-              (std::shared_ptr<std::mutex>, std::shared_ptr<std::type_index>), (override));
+              (std::shared_ptr<std::mutex>, std::shared_ptr<std::type_index>),
+              (override));
 };

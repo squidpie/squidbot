@@ -1,5 +1,5 @@
 #include "pluginmanager.h"
-#include <condition_variable>
+#include "plugin.h"
 
 void PluginManager::load(std::shared_ptr<CoreContext> context) {
   clear_unload_threads();
@@ -75,12 +75,13 @@ PluginManager::service_reload_warn(std::shared_ptr<std::mutex> plugin_mutex,
       plugin->stop();
     }
   }
-  return std::thread(&PluginManager::service_reload_notify, this,
-                            plugin_mutex, index);
+  return std::thread(&PluginManager::service_reload_notify, this, plugin_mutex,
+                     index);
 }
 
 void PluginManager::service_reload_notify(
-    std::shared_ptr<std::mutex> plugin_mutex, std::shared_ptr<std::type_index> index) {
+    std::shared_ptr<std::mutex> plugin_mutex,
+    std::shared_ptr<std::type_index> index) {
   plugin_mutex->lock();
   for (const auto &[key, entry] : *plugins) {
     auto plugin = entry.second;

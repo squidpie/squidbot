@@ -3,7 +3,6 @@
 #include "mock_core.h"
 #include "mockplugin/mockplugin.h"
 #include "mockservice/mockservice.h"
-#include "pluginmanager.h"
 #include "utils/defines.h"
 
 class PluginManagerTest : public testing::Test {
@@ -86,9 +85,15 @@ TEST_F(PluginManagerTest, service_unload_notify) {
 }
 
 TEST_F(PluginManagerTest, service_reload_warn) {
+  EXPECT_CALL(*server, create_client()).WillOnce(testing::Return(client));
+  EXPECT_CALL(*client, subscribe(testing::Eq(TEST_EVENT_TYPE)))
+      .WillOnce(testing::Return());
+  EXPECT_CALL(*service_manager,
+              _get_interface(testing::Eq(std::type_index(typeid(MockService)))))
+      .WillOnce(testing::Return(interface));
+
   auto lock = std::make_shared<std::mutex>();
   auto index = std::make_shared<std::type_index>(typeid(MockService));
-  auto thread =
-      dut->service_reload_warn(lock, index);
+  auto thread = dut->service_reload_warn(lock, index);
   thread.join();
 }

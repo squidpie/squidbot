@@ -1,14 +1,11 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "events.h"
 #include "logging.h"
+#include "mock_core.h"
 #include "service_loader.h"
-#include "servicelib.h"
 #include "utils/defines.h"
 #include "utils/lib_loader.h"
-
-#include "mock_core.h"
 
 class ServiceLoaderTest : public testing::Test {
 protected:

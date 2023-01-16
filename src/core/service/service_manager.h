@@ -1,11 +1,7 @@
 #pragma once
 
-#include <typeindex>
-
-#include "logging.h"
-#include "service.h"
+#include "core.h"
 #include "service_loader.h"
-#include "servicelib.h"
 #include "utils/lib_loader.h"
 
 class ServiceManagerBase {

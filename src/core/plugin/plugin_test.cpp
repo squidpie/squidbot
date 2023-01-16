@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include "mock_core.h"
-#include "plugin.h"
 #include "utils/defines.h"
 
 class PluginTest : public testing::Test {

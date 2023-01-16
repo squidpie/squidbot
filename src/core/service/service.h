@@ -1,12 +1,10 @@
 #pragma once
 
+#include "core.h"
 #include "event_server.h"
 #include "events.h"
+#include "lib/core_context.h"
 #include "logging.h"
-#include "runner.h"
-#include "service_loader.h"
-#include "service_manager.h"
-#include "servicelib.h"
 
 class ServiceInterfaceBase {
 public:
@@ -49,9 +47,7 @@ public:
     client->subscribe(TEST_EVENT_TYPE);
     runner = std::make_shared<Runner<R>>(std::make_shared<Rc>(client, data));
   }
-  ~Service() {
-    stop();
-  }
+  ~Service() { stop(); }
 
   void start() { runner->start(); }
   void stop() { runner->stop(); }
