@@ -52,6 +52,8 @@ TEST_F(ServiceManagerTest, null_interface) {
 }
 
 TEST_F(ServiceManagerTest, service_unload_load) {
+  EXPECT_CALL(*plugin_manager, service_unload_notify(testing::Eq(
+                                   std::type_index(typeid(MockService)))));
   dut->unload_service<MockService>();
   EXPECT_TRUE(services->empty());
 
@@ -63,6 +65,9 @@ TEST_F(ServiceManagerTest, service_unload_load) {
 }
 
 TEST_F(ServiceManagerTest, service_reload) {
+  EXPECT_CALL(*plugin_manager,
+              service_reload_warn(testing::_, testing::_))
+      .WillOnce(testing::Return(std::thread([] {})));
   EXPECT_CALL(*event_server, create_client())
       .WillOnce(testing::Return(event_client));
   EXPECT_CALL(*event_client, subscribe(testing::_));
