@@ -1,30 +1,32 @@
 #include <gtest/gtest.h>
 
-#include "events.h"
 #include "mock_core.h"
-#include "plugin.h"
 #include "utils/defines.h"
 
 class PluginRunActionTest : public testing::Test {
-  protected:
-    std::shared_ptr<MockCoreEventClient> client = std::make_shared<MockCoreEventClient>();
-    std::shared_ptr<MockCorePluginFilter> filter = std::make_shared<MockCorePluginFilter>();
-    std::shared_ptr<MockCorePluginAction> action = std::make_shared<MockCorePluginAction>();
+protected:
+  std::shared_ptr<MockCoreEventClient> client =
+      std::make_shared<MockCoreEventClient>();
+  std::shared_ptr<MockCorePluginFilter> filter =
+      std::make_shared<MockCorePluginFilter>();
+  std::shared_ptr<MockCorePluginAction> action =
+      std::make_shared<MockCorePluginAction>();
 
-    std::shared_ptr<PluginRunActionContext> context = std::make_shared<PluginRunActionContext>(client, filter, action);
+  std::shared_ptr<PluginRunActionContext> context =
+      std::make_shared<PluginRunActionContext>(client, filter, action);
 
-    PluginRunAction dut = PluginRunAction(context);
+  PluginRunAction dut = PluginRunAction(context);
 
-    void SetUp() override {
-
-    }
+  void SetUp() override {}
 };
 
 TEST_F(PluginRunActionTest, rx) {
-  Event rx {1, TEST_EVENT_TYPE };
+  Event rx{1, TEST_EVENT_TYPE};
   EXPECT_CALL(*client, receive()).WillOnce(testing::Return(rx));
-  EXPECT_CALL(*filter, is_trigger(testing::Eq(rx))).WillOnce(testing::Return(true));
-  EXPECT_CALL(*action, trigger_action(testing::Eq(rx))).WillOnce(testing::Return());
+  EXPECT_CALL(*filter, is_trigger(testing::Eq(rx)))
+      .WillOnce(testing::Return(true));
+  EXPECT_CALL(*action, trigger_action(testing::Eq(rx)))
+      .WillOnce(testing::Return());
   dut.run_action();
 }
 

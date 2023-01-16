@@ -1,11 +1,7 @@
 #pragma once
 
-#include <typeindex>
-
-#include "logging.h"
-#include "service.h"
+#include "core.h"
 #include "service_loader.h"
-#include "servicelib.h"
 #include "utils/lib_loader.h"
 
 class ServiceManagerBase {
@@ -20,7 +16,7 @@ public:
     _register_service(std::type_index(typeid(S)),
                       std::make_pair(lib_path, service));
   }
-  
+
   /*
   Caller must check for nullptr
    */
@@ -36,7 +32,7 @@ public:
   virtual void load_service(std::string) = 0;
 
   template <class S> void reload_service() {
-    _reload(std::type_index(typeid(S)));
+    _reload(std::make_shared<std::type_index>(typeid(S)));
   }
 
 protected:
@@ -46,7 +42,7 @@ protected:
   virtual std::shared_ptr<ServiceInterfaceBase>
   _get_interface(std::type_index index) = 0;
   virtual void _unload(std::type_index) = 0;
-  virtual void _reload(std::type_index) = 0;
+  virtual void _reload(std::shared_ptr<std::type_index>) = 0;
 };
 
 class ServiceManager : virtual public ServiceManagerBase,
@@ -76,11 +72,12 @@ public:
 #endif
 
 protected:
+  std::shared_ptr<CoreContext> context;
   std::shared_ptr<ServiceMap_t> services = std::make_shared<ServiceMap_t>();
   std::unique_ptr<LibLoader<ServiceLoader>> libloader;
 
   std::shared_ptr<ServiceInterfaceBase> get_service_interface(std::type_index);
   bool is_service_available(std::type_index);
   void _unload(std::type_index) override;
-  void _reload(std::type_index) override;
+  void _reload(std::shared_ptr<std::type_index>) override;
 };

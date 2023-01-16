@@ -1,7 +1,6 @@
 #pragma once
 
-#include "core.h"
-#include "service.h"
+#include "corelib.h"
 
 class MockServiceData : virtual public ServiceDataBase {
 public:
@@ -11,11 +10,13 @@ public:
 class MockServicePluginInterface : virtual public ServiceInterfaceBase {
 public:
   MockServicePluginInterface() {}
-  MockServicePluginInterface(std::shared_ptr<MockServiceData> data) : data(data) {  }
+  MockServicePluginInterface(std::shared_ptr<MockServiceData> data)
+      : data(data) {}
   ~MockServicePluginInterface() {}
   void test();
-  protected:
-    std::shared_ptr<MockServiceData> data;
+
+protected:
+  std::shared_ptr<MockServiceData> data;
 };
 
 class MockServiceExternalInterface : virtual public ServiceInterfaceBase {

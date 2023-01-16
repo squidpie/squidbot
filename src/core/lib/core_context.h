@@ -3,10 +3,7 @@
 
 #include "utils/context.h"
 #include "logging.h"
-
-class EventServerBase;
-class ServiceManagerBase;
-class PluginManagerBase;
+#include "core.h"
 
 class CoreContext : virtual public Context {
 public:
