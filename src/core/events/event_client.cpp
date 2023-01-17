@@ -1,4 +1,5 @@
 #include "event_client.h"
+#include "event_server.h"
 
 const Event EventClient::receive() {
   std::lock_guard<std::mutex> _l(*qlock);
@@ -21,7 +22,8 @@ void EventClient::send(Event tx_event) {
   q->push(tx_event);
 }
 
-void EventClient::subscribe(EventType sub_event) {
-  Event tx = {SUBSCRIBE_EVENT_TYPE, sub_event};
+void EventClient::subscribe(uuid_t sub_event) {
+  auto data = std::make_shared<SubEventData>(sub_event);
+  Event tx = {id, SERVEREVENTS.SUBSCRIBE_EVENT_TYPE, data};
   send(tx);
 }

@@ -7,7 +7,9 @@ AdminAction::AdminAction(InterfaceMap_t *_interfaces,
       interfaces->at(std::type_index(typeid(MockService))));
 }
 
-bool AdminFilter::is_trigger(Event rx) { return (rx.type == TEST_EVENT_TYPE); }
+bool AdminFilter::is_trigger(Event rx) {
+  return (rx.type == EVENTS.TEST_EVENT_TYPE);
+}
 
 void AdminAction::trigger_action(Event rx) { mockservice->test(); }
 

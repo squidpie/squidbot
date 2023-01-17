@@ -49,7 +49,9 @@ public:
   PluginRunAction(std::shared_ptr<PluginRunActionContext> context)
       : client(context->client), filter(context->filter),
         action(context->action) {}
-  ~PluginRunAction() {}
+  ~PluginRunAction() {
+    client->send(Event{NULL_CLIENT_ID, SERVEREVENTS.DISCONNECT_EVENT_TYPE});
+  }
 
   void run_action() override;
 
@@ -106,7 +108,7 @@ protected:
 
   auto configure_client() {
     auto client = context->event_server->create_client();
-    client->subscribe(TEST_EVENT_TYPE);
+    client->subscribe(EVENTS.TEST_EVENT_TYPE);
     return client;
   }
 

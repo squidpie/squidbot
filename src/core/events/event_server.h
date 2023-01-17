@@ -11,11 +11,29 @@
 #include "events.h"
 #include "runner.h"
 
+const std::string EVENTSERVERNAMESPACE = "96b3ff42-9643-11ed-87d5-00155d30393f";
+
+struct ServerEvents {
+  uuid_t SUBSCRIBE_EVENT_TYPE =
+      uuid(EVENTSERVERNAMESPACE + "SUBSCRIBE_EVENT_TYPE");
+  uuid_t DISCONNECT_EVENT_TYPE =
+      uuid(EVENTSERVERNAMESPACE + "DISCONNECT_EVENT_TYPE");
+};
+
+static inline ServerEvents SERVEREVENTS;
+
+class SubEventData : virtual public EventDataBase {
+public:
+  SubEventData(uuid_t data) : data(data) {}
+  ~SubEventData() {}
+  uuid_t data;
+};
+
 typedef std::unordered_map<
     uint_fast64_t,
     std::pair<std::shared_ptr<std::mutex>, std::shared_ptr<std::queue<Event>>>>
     ClientMap_t;
-typedef std::unordered_map<EventType, std::vector<uint_fast64_t>> SubMap_t;
+typedef std::unordered_map<uuid_t, std::vector<uint_fast64_t>> SubMap_t;
 
 class EventServerRunActionContext : virtual public RunActionContextBase {
 public:
@@ -37,7 +55,7 @@ public:
   ~EventServerRunAction() {}
   void run_action();
   typedef EventServerRunActionContext context_t;
-  
+
 protected:
   void route_event(Event);
   bool is_valid_route_event(uint_fast64_t, Event);
@@ -45,12 +63,9 @@ protected:
 
   ClientMap_t *clients;
   SubMap_t *subs;
-
-  
 };
 
-typedef Runner<EventServerRunAction>
-    EventServerRunner_t;
+typedef Runner<EventServerRunAction> EventServerRunner_t;
 
 class EventServerBase {
 public:
@@ -70,16 +85,14 @@ public:
                                                       &subscriptions));
     assert(runner != NULL);
   }
-  ~EventServer() {}
+  ~EventServer() { stop(); }
   std::shared_ptr<EventClientBase> create_client();
   void start() { runner->start(); };
   void stop() { runner->stop(); }
 
-  #ifdef _GTEST_COMPILE
-  auto dump() {
-    return std::make_pair(clients, subscriptions);
-  }
-  #endif
+#ifdef _GTEST_COMPILE
+  auto dump() { return std::make_pair(clients, subscriptions); }
+#endif
 
 protected:
   void register_q(uint_fast64_t, std::shared_ptr<std::mutex>,
@@ -87,7 +100,8 @@ protected:
 
   uint_fast64_t get_id() { return ++current_id; }
 
-  void debug_dump(uint_fast64_t id, std::shared_ptr<std::mutex> qlock, std::shared_ptr<std::queue<Event>> q) {
+  void debug_dump(uint_fast64_t id, std::shared_ptr<std::mutex> qlock,
+                  std::shared_ptr<std::queue<Event>> q) {
     std::cerr << ":: EventServer Dump ::" << std::endl;
     std::cerr << ":: current id = " << id << std::endl;
     std::cerr << ":: current qlock = " << qlock << std::endl;

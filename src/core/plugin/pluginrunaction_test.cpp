@@ -18,10 +18,14 @@ protected:
   PluginRunAction dut = PluginRunAction(context);
 
   void SetUp() override {}
+  void TearDown() override {
+    EXPECT_CALL(*client, send(testing::Eq(
+                             Event{0, SERVEREVENTS.DISCONNECT_EVENT_TYPE})));
+  }
 };
 
 TEST_F(PluginRunActionTest, rx) {
-  Event rx{1, TEST_EVENT_TYPE};
+  Event rx{1, EVENTS.TEST_EVENT_TYPE};
   EXPECT_CALL(*client, receive()).WillOnce(testing::Return(rx));
   EXPECT_CALL(*filter, is_trigger(testing::Eq(rx)))
       .WillOnce(testing::Return(true));

@@ -18,13 +18,13 @@ TEST_F(EventsTest, null_event) {
 TEST_F(EventsTest, tx_rx) {
   auto dut_client_a = dut_server.create_client();
   auto dut_client_b = dut_server.create_client();
-  EXPECT_FALSE(dut_client_a == NULL);
-  EXPECT_FALSE(dut_client_b == NULL);
+  EXPECT_FALSE(dut_client_a == nullptr);
+  EXPECT_FALSE(dut_client_b == nullptr);
   dut_server.start();
-  dut_client_a->subscribe(TEST_EVENT_TYPE);
+  dut_client_a->subscribe(EVENTS.TEST_EVENT_TYPE);
 
   sleep(1);
-  Event tx_event{.type = TEST_EVENT_TYPE};
+  Event tx_event{.type = EVENTS.TEST_EVENT_TYPE};
   dut_client_b->send(tx_event);
 
   sleep(1);

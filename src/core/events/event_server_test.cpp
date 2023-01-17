@@ -35,8 +35,10 @@ protected:
     mock_client_map[id_a] = std::make_pair(qlock_a, q_a);
     mock_client_map[id_b] = std::make_pair(qlock_b, q_b);
 
-    Event sub_event = Event{
-        .source = id_a, .type = SUBSCRIBE_EVENT_TYPE, .data = TEST_EVENT_TYPE};
+    Event sub_event =
+        Event{.source = id_a,
+              .type = SERVEREVENTS.SUBSCRIBE_EVENT_TYPE,
+              .data = std::make_shared<SubEventData>(EVENTS.TEST_EVENT_TYPE)};
     q_a->push(sub_event);
     dut.run_action();
   }
@@ -47,11 +49,11 @@ protected:
 TEST_F(EventServerRunActionTest, subscribe) {
   EXPECT_TRUE(q_a->size() == 0);
   EXPECT_TRUE(mock_sub_map.size() == 1);
-  EXPECT_TRUE(mock_sub_map[TEST_EVENT_TYPE].front() == id_a);
+  EXPECT_TRUE(mock_sub_map[EVENTS.TEST_EVENT_TYPE].front() == id_a);
 }
 
 TEST_F(EventServerRunActionTest, route) {
-  Event route_event = Event{.source = id_b, .type = TEST_EVENT_TYPE};
+  Event route_event = Event{.source = id_b, .type = EVENTS.TEST_EVENT_TYPE};
   q_b->push(route_event);
   dut.run_action();
   EXPECT_TRUE(q_b->size() == 0);

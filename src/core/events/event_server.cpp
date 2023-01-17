@@ -12,18 +12,22 @@ void EventServerRunAction::run_action() {
 
     const std::lock_guard<std::mutex> _lock(*qlock);
     auto front_event = q->empty() ? NULL_EVENT : q->front();
-    switch (front_event.type) {
-    case NULL_EVENT_TYPE:
-      break;
-    case SUBSCRIBE_EVENT_TYPE:
+
+    if (front_event.type == EVENTS.NULL_EVENT_TYPE) {
+      return;
+    } else if (front_event.type == SERVEREVENTS.SUBSCRIBE_EVENT_TYPE) {
       q->pop();
-      (*subs)[front_event.data].push_back(id);
-      break;
-    default:
-      if (front_event.source == id) {
-        q->pop();
-        route_event(front_event);
-      }
+      auto data =
+          std::dynamic_pointer_cast<SubEventData>(front_event.data)->data;
+      (*subs)[data].push_back(id);
+
+    } else if (front_event.type == SERVEREVENTS.DISCONNECT_EVENT_TYPE) {
+      q->pop();
+      std::cerr << "DISCONNECT GOES HERE" << std::endl;
+
+    } else if (front_event.source == id) {
+      q->pop();
+      route_event(front_event);
     }
   });
 }
@@ -57,7 +61,8 @@ std::shared_ptr<EventClientBase> EventServer::create_client() {
       std::make_shared<EventClient>(id, qlock, q));
 }
 
-void EventServer::register_q(uint_fast64_t id, std::shared_ptr<std::mutex> qlock,
+void EventServer::register_q(uint_fast64_t id,
+                             std::shared_ptr<std::mutex> qlock,
                              std::shared_ptr<std::queue<Event>> q) {
   clients[id] = std::make_pair(qlock, q);
 }
