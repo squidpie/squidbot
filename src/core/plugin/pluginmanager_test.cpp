@@ -66,10 +66,18 @@ TEST_F(PluginManagerTest, reload_plugin) {
               _get_interface(testing::Eq(std::type_index(typeid(MockService)))))
       .WillOnce(testing::Return(interface));
   dut->reload_plugin<MockPlugin>();
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  //while(unload_threads->size() == 0) {}
+  EXPECT_EQ(unload_threads->size(), 1);
+  unload_threads->at(0)->join();
+  unload_threads->pop_back();
+
   EXPECT_EQ(plugins->size(), 1);
+  EXPECT_TRUE(plugins->find(std::type_index(typeid(MockPlugin))) != plugins->end());
   EXPECT_EQ(plugins->at(std::type_index(typeid(MockPlugin))).first,
             TEST_LIB_DIR + "/plugins/libmockplugin.so");
-  EXPECT_EQ(unload_threads->size(), 1);
+
 }
 
 TEST_F(PluginManagerTest, service_unload_notify) {

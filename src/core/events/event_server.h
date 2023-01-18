@@ -27,21 +27,20 @@ typedef std::unordered_map<uuid_t, std::vector<clientid_t>> SubMap_t;
 
 class EventServerRunActionContext : virtual public RunActionContextBase {
 public:
-  EventServerRunActionContext() {}
-  EventServerRunActionContext(std::shared_ptr<ClientMap_t> _clients,
-                              std::shared_ptr<SubMap_t> _subs)
-      : clients(_clients.get()), subs(_subs.get()) {}
-  EventServerRunActionContext(ClientMap_t *_clients, SubMap_t *_subs)
-      : clients(_clients), subs(_subs) {}
+  EventServerRunActionContext(std::shared_ptr<ClientMap_t> clients,
+                              std::shared_ptr<SubMap_t> subs,
+                                  std::shared_ptr<std::mutex> rlock)
+      : clients(clients), subs(subs), rlock(rlock) {}
   ~EventServerRunActionContext() {}
-  ClientMap_t *clients;
-  SubMap_t *subs;
+  std::shared_ptr<ClientMap_t> clients;
+  std::shared_ptr<SubMap_t> subs;
+  std::shared_ptr<std::mutex> rlock;
 };
 
 class EventServerRunAction : virtual public RunActionBase {
 public:
   EventServerRunAction(std::shared_ptr<EventServerRunActionContext> _context)
-      : clients(_context->clients), subs(_context->subs) {}
+      : clients(_context->clients), subs(_context->subs), rlock(_context->rlock) {}
   ~EventServerRunAction() {}
   void run_action();
   typedef EventServerRunActionContext context_t;
@@ -59,9 +58,9 @@ protected:
     std::cerr << ":: current q = " << q << std::endl;
     std::cerr << ":: End Dump ::" << std::endl;
   }
-  ClientMap_t *clients;
-  SubMap_t *subs;
-  std::thread dthread;
+  std::shared_ptr<ClientMap_t> clients;
+  std::shared_ptr<SubMap_t> subs;
+  std::shared_ptr<std::mutex> rlock;
 };
 
 typedef Runner<EventServerRunAction> EventServerRunner_t;
@@ -79,9 +78,9 @@ public:
     runner = _runner;
   }
   EventServer() {
-    runner = std::make_shared<EventServerRunner_t>(
-        std::make_shared<EventServerRunActionContext>(&clients,
-                                                      &subscriptions));
+    auto run_context =
+        std::make_shared<EventServerRunActionContext>(clients, subscriptions, rlock);
+    runner = std::make_shared<EventServerRunner_t>(run_context);
     assert(runner != NULL);
   }
   ~EventServer() { stop(); }
@@ -90,6 +89,10 @@ public:
   void stop() { runner->stop(); }
 
 #ifdef _GTEST_COMPILE
+  auto inject(auto _clients, auto _subs) {
+    clients = _clients;
+    subscriptions = _subs;
+  }
   auto dump() { return std::make_pair(clients, subscriptions); }
 #endif
 
@@ -100,8 +103,9 @@ protected:
   clientid_t get_id();
 
   bool is_running = false;
-  ClientMap_t clients;
-  SubMap_t subscriptions;
+  std::shared_ptr<std::mutex> rlock = std::make_shared<std::mutex>();
+  std::shared_ptr<ClientMap_t> clients = std::make_shared<ClientMap_t>();
+  std::shared_ptr<SubMap_t> subscriptions = std::make_shared<SubMap_t>();
 
   clientid_t current_id = 0;
 

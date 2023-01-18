@@ -12,12 +12,14 @@
 
 class EventServerRunActionTest : public testing::Test {
 protected:
-  ClientMap_t mock_client_map;
-  SubMap_t mock_sub_map;
+  std::shared_ptr<ClientMap_t> mock_client_map =
+      std::make_shared<ClientMap_t>();
+  std::shared_ptr<SubMap_t> mock_sub_map = std::make_shared<SubMap_t>();
+  std::shared_ptr<std::mutex> rlock = std::make_shared<std::mutex>();
 
   std::shared_ptr<EventServerRunActionContext> dut_run_action_context =
-      std::make_shared<EventServerRunActionContext>(&mock_client_map,
-                                                    &mock_sub_map);
+      std::make_shared<EventServerRunActionContext>(mock_client_map,
+                                                    mock_sub_map, rlock);
 
   EventServerRunAction dut = EventServerRunAction(dut_run_action_context);
 
@@ -32,8 +34,8 @@ protected:
   clientid_t id_b = 2;
 
   void SetUp() override {
-    mock_client_map[id_a] = std::make_pair(qlock_a, q_a);
-    mock_client_map[id_b] = std::make_pair(qlock_b, q_b);
+    mock_client_map->insert({id_a, std::make_pair(qlock_a, q_a)});
+    mock_client_map->insert({id_b, std::make_pair(qlock_b, q_b)});
 
     Event sub_event =
         Event{.source = id_a,
@@ -48,8 +50,8 @@ protected:
 
 TEST_F(EventServerRunActionTest, subscribe) {
   EXPECT_TRUE(q_a->size() == 0);
-  EXPECT_TRUE(mock_sub_map.size() == 1);
-  EXPECT_TRUE(mock_sub_map[EVENTS.TEST_EVENT_TYPE].front() == id_a);
+  EXPECT_TRUE(mock_sub_map->size() == 1);
+  EXPECT_TRUE(mock_sub_map->at(EVENTS.TEST_EVENT_TYPE).front() == id_a);
 }
 
 TEST_F(EventServerRunActionTest, route) {
@@ -70,5 +72,5 @@ TEST_F(EventServerTest, create_client) {
   auto client = dut.create_client();
   EXPECT_TRUE(client != nullptr);
   auto dump = dut.dump();
-  EXPECT_EQ(dump.first.size(), 1);
+  EXPECT_EQ(dump.first->size(), 1);
 }

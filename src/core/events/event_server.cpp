@@ -6,21 +6,15 @@
 
 void EventServerRunAction::run_action() {
   auto disconnect_id = NULL_CLIENT_ID;
+  auto is_disconnect{false};
+  std::vector<clientid_t> disconnect_ids;
 
+  std::lock_guard<std::mutex> rguard(*rlock);
   std::for_each(
-      clients->begin(), clients->end(), [this, &disconnect_id](auto entry) {
+      clients->begin(), clients->end(), [this, &is_disconnect](auto entry) {
         auto id = entry.first;
         auto qlock = entry.second.first;
         auto q = entry.second.second;
-
-        /*                    :: WORKAROUND ::
-            there exists a race condition where sometimes q  and/or qlock
-            can be -0- at this point
-            IDEA: to properly resolve need to make clients a shared pointer in
-            EventServer and pass another mutex to EventServerRunAction
-        */
-        if (qlock == nullptr || q == nullptr)
-          return;
 
         const std::lock_guard<std::mutex> _lock(*qlock);
         auto front_event = q->empty() ? NULL_EVENT : q->front();
@@ -35,7 +29,7 @@ void EventServerRunAction::run_action() {
           (*subs)[data].push_back(id);
 
         } else if (front_event.type == SERVEREVENTS.DISCONNECT_EVENT_TYPE) {
-          disconnect_id = id;
+          is_disconnect = true;
           q->pop();
 
         } else if (front_event.source == id) {
@@ -44,7 +38,18 @@ void EventServerRunAction::run_action() {
         }
       });
 
-  if (disconnect_id != NULL_CLIENT_ID) {
+  if (is_disconnect) {
+    for (const clientid_t &id : disconnect_ids) {
+      clients->erase(id);
+      for (auto entry = subs->begin(); entry != subs->end();) {
+        auto found = std::find(entry->second.begin(), entry->second.end(), id);
+        if (found != entry->second.end()) {
+          entry->second.erase(found);
+          entry++;
+        } else
+          ++entry;
+      }
+    }
     clients->erase(disconnect_id);
   }
 }
@@ -68,6 +73,7 @@ bool EventServerRunAction::is_valid_route_event(clientid_t id,
 }
 
 std::shared_ptr<EventClientBase> EventServer::create_client() {
+  std::lock_guard<std::mutex> rguard(*rlock);
   auto id = get_id();
   auto qlock = std::make_shared<std::mutex>();
   auto q = std::make_shared<std::queue<Event>>();
@@ -76,16 +82,15 @@ std::shared_ptr<EventClientBase> EventServer::create_client() {
       std::make_shared<EventClient>(id, qlock, q));
 }
 
-void EventServer::register_q(clientid_t id,
-                             std::shared_ptr<std::mutex> qlock,
+void EventServer::register_q(clientid_t id, std::shared_ptr<std::mutex> qlock,
                              std::shared_ptr<std::queue<Event>> q) {
-  clients.insert({ id, std::make_pair(qlock, q) });
+  clients->insert({id, std::make_pair(qlock, q)});
 }
 
 clientid_t EventServer::get_id() {
   if (++current_id == 0)
     ++current_id;
-  while (clients.find(current_id) != clients.end()) {
+  while (clients->find(current_id) != clients->end()) {
     ++current_id;
   }
   return current_id;
