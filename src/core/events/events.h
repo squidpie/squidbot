@@ -15,8 +15,7 @@ static inline DefaultEvents EVENTS;
 
 const uint_fast64_t NULL_CLIENT_ID = 0;
 
-class EventDataBase {
-public:
+struct EventDataBase {
   virtual ~EventDataBase() {}
 };
 

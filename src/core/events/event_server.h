@@ -7,23 +7,13 @@
 #include <queue>
 #include <unordered_map>
 
+#include "core.h"
 #include "event_client.h"
+#include "event_server_events.h"
 #include "events.h"
 #include "runner.h"
 
-const std::string EVENTSERVERNAMESPACE = "96b3ff42-9643-11ed-87d5-00155d30393f";
-
-struct ServerEvents {
-  uuid_t SUBSCRIBE_EVENT_TYPE =
-      uuid(EVENTSERVERNAMESPACE + "SUBSCRIBE_EVENT_TYPE");
-  uuid_t DISCONNECT_EVENT_TYPE =
-      uuid(EVENTSERVERNAMESPACE + "DISCONNECT_EVENT_TYPE");
-};
-
-static inline ServerEvents SERVEREVENTS;
-
-class SubEventData : virtual public EventDataBase {
-public:
+struct SubEventData : virtual EventDataBase {
   SubEventData(uuid_t data) : data(data) {}
   ~SubEventData() {}
   uuid_t data;
@@ -60,7 +50,14 @@ protected:
   void route_event(Event);
   bool is_valid_route_event(uint_fast64_t, Event);
   void send_to_client(uint_fast64_t, Event);
-
+  void debug_dump(uint_fast64_t id, std::shared_ptr<std::mutex> qlock,
+                  std::shared_ptr<std::queue<Event>> q) {
+    std::cerr << ":: EventServer Dump ::" << std::endl;
+    std::cerr << ":: current id = " << id << std::endl;
+    std::cerr << ":: current qlock = " << qlock << std::endl;
+    std::cerr << ":: current q = " << q << std::endl;
+    std::cerr << ":: End Dump ::" << std::endl;
+  }
   ClientMap_t *clients;
   SubMap_t *subs;
 };
@@ -99,17 +96,6 @@ protected:
                   std::shared_ptr<std::queue<Event>>);
 
   uint_fast64_t get_id() { return ++current_id; }
-
-  void debug_dump(uint_fast64_t id, std::shared_ptr<std::mutex> qlock,
-                  std::shared_ptr<std::queue<Event>> q) {
-    std::cerr << ":: EventServer Dump ::" << std::endl;
-    std::cerr << ":: current id = " << id << std::endl;
-    std::cerr << ":: current qlock = " << qlock << std::endl;
-    std::cerr << ":: current q = " << q << std::endl;
-    std::cerr << ":: clients = " << &clients << std::endl;
-    std::cerr << ":: subscriptions = " << &subscriptions << std::endl;
-    std::cerr << ":: End Dump ::" << std::endl;
-  }
 
   bool is_running = false;
   ClientMap_t clients;

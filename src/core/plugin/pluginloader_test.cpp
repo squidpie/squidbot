@@ -37,7 +37,5 @@ TEST_F(PluginLoaderTest, setup) {
       .WillOnce(testing::Return(interface));
   EXPECT_CALL(*plugin_manager, _register_plugin(testing::_, testing::_))
       .WillOnce(testing::Return());
-  EXPECT_CALL(*client,
-              send(testing::Eq(Event{0, SERVEREVENTS.DISCONNECT_EVENT_TYPE})));
   LibLoader<PluginLoader> dut = LibLoader<PluginLoader>(context);
 }

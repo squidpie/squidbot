@@ -57,7 +57,6 @@ private:
   void thread_loop() {
     while (is_running()) {
       run_action->run_action();
-      std::this_thread::sleep_for(std::chrono::nanoseconds(1));
     }
   }
 

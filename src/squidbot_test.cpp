@@ -35,5 +35,5 @@ protected:
 
 TEST_F(SquidbotTest, reload_service) {
   service_manager->reload_service<MockService>();
-  sleep(1);
+  std::this_thread::sleep_for(std::chrono::nanoseconds(1));
 }

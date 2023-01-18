@@ -10,6 +10,11 @@ void EventServerRunAction::run_action() {
     auto qlock = entry.second.first;
     auto q = entry.second.second;
 
+    // there exists a race condition where sometimes q  and/or qlock
+    // can be -0- at this point
+    if (qlock == nullptr || q == nullptr)
+      return;
+
     const std::lock_guard<std::mutex> _lock(*qlock);
     auto front_event = q->empty() ? NULL_EVENT : q->front();
 
@@ -43,7 +48,7 @@ void EventServerRunAction::route_event(Event tx) {
 void EventServerRunAction::send_to_client(uint_fast64_t id, Event tx) {
   auto qlock = (*clients)[id].first;
   auto q = (*clients)[id].second;
-  const std::lock_guard<std::mutex> _lock(*qlock);
+  // const std::lock_guard<std::mutex> _lock(*qlock);
   q->push(tx);
 }
 

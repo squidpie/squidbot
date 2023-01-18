@@ -46,8 +46,6 @@ TEST_F(PluginTest, context_construct) {
   EXPECT_CALL(*client, subscribe(testing::Eq(EVENTS.TEST_EVENT_TYPE)))
       .WillOnce(testing::Return());
   Plugin<MockCorePlugin> construct_dut = Plugin<MockCorePlugin>(context);
-  EXPECT_CALL(*client,
-              send(testing::Eq(Event{0, SERVEREVENTS.DISCONNECT_EVENT_TYPE})));
 }
 
 TEST_F(PluginTest, dependency) {

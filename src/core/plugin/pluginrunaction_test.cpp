@@ -18,10 +18,7 @@ protected:
   PluginRunAction dut = PluginRunAction(context);
 
   void SetUp() override {}
-  void TearDown() override {
-    EXPECT_CALL(*client, send(testing::Eq(
-                             Event{0, SERVEREVENTS.DISCONNECT_EVENT_TYPE})));
-  }
+  void TearDown() override {}
 };
 
 TEST_F(PluginRunActionTest, rx) {

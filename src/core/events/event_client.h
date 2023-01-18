@@ -5,6 +5,8 @@
 #include <mutex>
 #include <queue>
 
+#include "core.h"
+#include "event_server_events.h"
 #include "events.h"
 
 class EventClientBase {
@@ -20,7 +22,9 @@ public:
   EventClient(uint_fast64_t id, std::shared_ptr<std::mutex> qlock,
               std::shared_ptr<std::queue<Event>> q)
       : id(id), qlock(qlock), q(q) {}
-  ~EventClient() {}
+  ~EventClient() {
+    send(Event{NULL_CLIENT_ID, SERVEREVENTS.DISCONNECT_EVENT_TYPE});
+  }
   void send(Event) override;
   const Event receive() override;
   void subscribe(uuid_t) override;

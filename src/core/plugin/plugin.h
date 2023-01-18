@@ -49,9 +49,7 @@ public:
   PluginRunAction(std::shared_ptr<PluginRunActionContext> context)
       : client(context->client), filter(context->filter),
         action(context->action) {}
-  ~PluginRunAction() {
-    client->send(Event{NULL_CLIENT_ID, SERVEREVENTS.DISCONNECT_EVENT_TYPE});
-  }
+  ~PluginRunAction() {}
 
   void run_action() override;
 
@@ -82,7 +80,7 @@ public:
     configure_runner(client);
   }
   Plugin() {}
-  ~Plugin() { runner->stop(); }
+  ~Plugin() { stop(); }
 
   void start() override { runner->start(); }
   void stop() override { runner->stop(); }
