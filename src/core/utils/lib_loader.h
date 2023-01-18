@@ -5,7 +5,6 @@
 #include <filesystem>
 #include <iostream>
 #include <stdexcept>
-#include <string>
 
 #include "logging.h"
 #include "utils/context.h"
@@ -67,7 +66,7 @@ public:
 
     dlclose(handle);
   }
-  
+
 protected:
   std::shared_ptr<Context> context;
 };

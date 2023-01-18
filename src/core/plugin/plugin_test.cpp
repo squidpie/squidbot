@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "event_server.h"
 #include "mock_core.h"
 #include "utils/defines.h"
 
@@ -42,7 +43,7 @@ TEST_F(PluginTest, context_construct) {
       plog::get(), server, service_manager, plugin_manager, TEST_LIB_DIR);
 
   EXPECT_CALL(*server, create_client()).WillOnce(testing::Return(client));
-  EXPECT_CALL(*client, subscribe(testing::Eq(TEST_EVENT_TYPE)))
+  EXPECT_CALL(*client, subscribe(testing::Eq(EVENTS.TEST_EVENT_TYPE)))
       .WillOnce(testing::Return());
   Plugin<MockCorePlugin> construct_dut = Plugin<MockCorePlugin>(context);
 }

@@ -45,4 +45,4 @@ protected:
   void TearDown() override { dut->stop(); }
 };
 
-TEST_F(ServiceTest, SetUp) { sleep(1); }
+TEST_F(ServiceTest, start_stop) {}

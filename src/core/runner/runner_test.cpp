@@ -22,4 +22,4 @@ protected:
   void TearDown() override { dut->stop(); }
 };
 
-TEST_F(RunnerTest, SetUp) { sleep(1); }
+TEST_F(RunnerTest, start_stop) {}

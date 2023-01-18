@@ -23,12 +23,14 @@ protected:
     context = std::make_shared<CoreContext>(
         plog::get(), server, service_manager, plugin_manager, TEST_LIB_DIR);
   }
+
+  void TearDown() override {}
 };
 
 TEST_F(PluginLoaderTest, setup) {
   EXPECT_CALL(*client, receive()).WillRepeatedly(testing::Return(NULL_EVENT));
   EXPECT_CALL(*server, create_client()).WillOnce(testing::Return(client));
-  EXPECT_CALL(*client, subscribe(testing::Eq(TEST_EVENT_TYPE)))
+  EXPECT_CALL(*client, subscribe(testing::Eq(EVENTS.TEST_EVENT_TYPE)))
       .WillOnce(testing::Return());
   EXPECT_CALL(*service_manager,
               _get_interface(testing::Eq(std::type_index(typeid(MockService)))))

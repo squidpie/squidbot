@@ -35,7 +35,7 @@ public:
   Runner(std::shared_ptr<Rc> context) {
     run_action = std::make_shared<R>(context);
   }
-  ~Runner() {}
+  ~Runner() { stop(); }
 
   void start() {
     set_running(true);
@@ -44,13 +44,14 @@ public:
 
   void stop() {
     set_running(false);
-    if (thread_handle) thread_handle->join();
+    if (thread_handle)
+      thread_handle->join();
     thread_handle.reset();
   }
 
-  #ifdef _GTEST_COMPILE
+#ifdef _GTEST_COMPILE
   void inject(std::shared_ptr<R> _run_action) { run_action = _run_action; }
-  #endif
+#endif
 
 private:
   void thread_loop() {

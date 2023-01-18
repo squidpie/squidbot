@@ -80,7 +80,7 @@ public:
     configure_runner(client);
   }
   Plugin() {}
-  ~Plugin() { runner->stop(); }
+  ~Plugin() { stop(); }
 
   void start() override { runner->start(); }
   void stop() override { runner->stop(); }
@@ -106,7 +106,7 @@ protected:
 
   auto configure_client() {
     auto client = context->event_server->create_client();
-    client->subscribe(TEST_EVENT_TYPE);
+    client->subscribe(EVENTS.TEST_EVENT_TYPE);
     return client;
   }
 

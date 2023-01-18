@@ -36,6 +36,7 @@ void PluginManager::load_plugin(std::string lib_name) {
 }
 
 void PluginManager::unload_actions(std::type_index index) {
+  const std::lock_guard<std::mutex> pguard(plock);
   plugins->at(index).second->stop();
   plugins->erase(index);
 }
@@ -82,7 +83,9 @@ PluginManager::service_reload_warn(std::shared_ptr<std::mutex> plugin_mutex,
 void PluginManager::service_reload_notify(
     std::shared_ptr<std::mutex> plugin_mutex,
     std::shared_ptr<std::type_index> index) {
+
   plugin_mutex->lock();
+  const std::lock_guard<std::mutex> pguard(plock);
   for (const auto &[key, entry] : *plugins) {
     auto plugin = entry.second;
     if (plugin->is_dependent(*index)) {

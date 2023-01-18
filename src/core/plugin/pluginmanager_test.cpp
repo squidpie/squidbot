@@ -28,11 +28,11 @@ protected:
                                             service_manager, dut, TEST_LIB_DIR);
     dut->inject(plugins, unload_threads);
 
-    Event rx = {0, TEST_EVENT_TYPE};
+    Event rx = {0, EVENTS.TEST_EVENT_TYPE};
     EXPECT_CALL(*client, receive()).WillRepeatedly(testing::Return(rx));
 
     EXPECT_CALL(*server, create_client()).WillOnce(testing::Return(client));
-    EXPECT_CALL(*client, subscribe(testing::Eq(TEST_EVENT_TYPE)))
+    EXPECT_CALL(*client, subscribe(testing::Eq(EVENTS.TEST_EVENT_TYPE)))
         .WillOnce(testing::Return());
     EXPECT_CALL(*service_manager, _get_interface(testing::Eq(
                                       std::type_index(typeid(MockService)))))
@@ -46,10 +46,10 @@ protected:
 
   void TearDown() override { dut->unload(); }
 };
-TEST_F(PluginManagerTest, load_plugin) {
+TEST_F(PluginManagerTest, unload_load) {
   dut->unload_plugin<MockPlugin>();
   EXPECT_CALL(*server, create_client()).WillOnce(testing::Return(client));
-  EXPECT_CALL(*client, subscribe(testing::Eq(TEST_EVENT_TYPE)))
+  EXPECT_CALL(*client, subscribe(testing::Eq(EVENTS.TEST_EVENT_TYPE)))
       .WillOnce(testing::Return());
   EXPECT_CALL(*service_manager,
               _get_interface(testing::Eq(std::type_index(typeid(MockService)))))
@@ -58,25 +58,26 @@ TEST_F(PluginManagerTest, load_plugin) {
   EXPECT_FALSE(plugins->empty());
 }
 
-TEST_F(PluginManagerTest, unload_plugin) {
-  dut->unload_plugin<MockPlugin>();
-  EXPECT_EQ(unload_threads->size(), 1);
-  sleep(1);
-  EXPECT_TRUE(plugins->empty());
-}
-
 TEST_F(PluginManagerTest, reload_plugin) {
   EXPECT_CALL(*server, create_client()).WillOnce(testing::Return(client));
-  EXPECT_CALL(*client, subscribe(testing::Eq(TEST_EVENT_TYPE)))
+  EXPECT_CALL(*client, subscribe(testing::Eq(EVENTS.TEST_EVENT_TYPE)))
       .WillOnce(testing::Return());
   EXPECT_CALL(*service_manager,
               _get_interface(testing::Eq(std::type_index(typeid(MockService)))))
       .WillOnce(testing::Return(interface));
   dut->reload_plugin<MockPlugin>();
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  //while(unload_threads->size() == 0) {}
+  EXPECT_EQ(unload_threads->size(), 1);
+  unload_threads->at(0)->join();
+  unload_threads->pop_back();
+
   EXPECT_EQ(plugins->size(), 1);
+  EXPECT_TRUE(plugins->find(std::type_index(typeid(MockPlugin))) != plugins->end());
   EXPECT_EQ(plugins->at(std::type_index(typeid(MockPlugin))).first,
             TEST_LIB_DIR + "/plugins/libmockplugin.so");
-  EXPECT_EQ(unload_threads->size(), 1);
+
 }
 
 TEST_F(PluginManagerTest, service_unload_notify) {
@@ -86,7 +87,7 @@ TEST_F(PluginManagerTest, service_unload_notify) {
 
 TEST_F(PluginManagerTest, service_reload_warn) {
   EXPECT_CALL(*server, create_client()).WillOnce(testing::Return(client));
-  EXPECT_CALL(*client, subscribe(testing::Eq(TEST_EVENT_TYPE)))
+  EXPECT_CALL(*client, subscribe(testing::Eq(EVENTS.TEST_EVENT_TYPE)))
       .WillOnce(testing::Return());
   EXPECT_CALL(*service_manager,
               _get_interface(testing::Eq(std::type_index(typeid(MockService)))))

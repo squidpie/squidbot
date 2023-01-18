@@ -1,5 +1,6 @@
 #pragma once
 
+#include "./events.h"
 #include "corelib.h"
 
 class MockServiceData : virtual public ServiceDataBase {

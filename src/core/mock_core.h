@@ -1,3 +1,5 @@
+#pragma once
+
 #include <gmock/gmock.h>
 
 #include "core.h"
@@ -27,7 +29,7 @@ public:
 class MockCoreEventClient : public EventClientBase {
 public:
   ~MockCoreEventClient() {}
-  MOCK_METHOD(void, subscribe, (EventType), (override));
+  MOCK_METHOD(void, subscribe, (uuid_t), (override));
   MOCK_METHOD(void, send, (Event), (override));
   MOCK_METHOD(const Event, receive, (), (override));
 };

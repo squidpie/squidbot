@@ -8,7 +8,7 @@ MockPluginAction::MockPluginAction(InterfaceMap_t *_interfaces,
 }
 
 bool MockPluginFilter::is_trigger(Event rx) {
-  return (rx.type == TEST_EVENT_TYPE);
+  return (rx.type == EVENTS.TEST_EVENT_TYPE);
 }
 
 void MockPluginAction::trigger_action(Event rx) { mockservice->test(); }

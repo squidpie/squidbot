@@ -61,6 +61,7 @@ public:
 #endif
 
 protected:
+  std::mutex plock;
   std::unique_ptr<LibLoader<PluginLoader>> lib_loader;
   std::shared_ptr<PluginMap_t> plugins = std::make_shared<PluginMap_t>();
   std::shared_ptr<std::vector<std::unique_ptr<std::thread>>> unload_threads =

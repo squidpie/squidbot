@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "corelib.h"
+#include "events.h"
 #include "logging.h"
 #include "mockservice/mockservice.h"
 #include "utils/defines.h"
@@ -20,11 +21,13 @@ protected:
                                             service_manager, plugin_manager,
                                             TEST_LIB_DIR);
 
+    event_server->start();
     service_manager->load(context);
     plugin_manager->load(context);
   }
 
   void TearDown() override {
+    event_server->stop();
     plugin_manager->unload();
     service_manager->unload();
   }
@@ -32,4 +35,5 @@ protected:
 
 TEST_F(SquidbotTest, reload_service) {
   service_manager->reload_service<MockService>();
+  std::this_thread::sleep_for(std::chrono::nanoseconds(1));
 }
