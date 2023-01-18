@@ -57,12 +57,12 @@ void EventServerRunAction::route_event(Event tx) {
   });
 }
 
-void EventServerRunAction::send_to_client(uint_fast64_t id, Event tx) {
+void EventServerRunAction::send_to_client(clientid_t id, Event tx) {
   auto q = clients->at(id).second;
   q->push(tx);
 }
 
-bool EventServerRunAction::is_valid_route_event(uint_fast64_t id,
+bool EventServerRunAction::is_valid_route_event(clientid_t id,
                                                 Event route_event) {
   return (id != route_event.source && clients->find(id) != clients->end());
 }
@@ -76,13 +76,13 @@ std::shared_ptr<EventClientBase> EventServer::create_client() {
       std::make_shared<EventClient>(id, qlock, q));
 }
 
-void EventServer::register_q(uint_fast64_t id,
+void EventServer::register_q(clientid_t id,
                              std::shared_ptr<std::mutex> qlock,
                              std::shared_ptr<std::queue<Event>> q) {
   clients.insert({ id, std::make_pair(qlock, q) });
 }
 
-uint_fast64_t EventServer::get_id() {
+clientid_t EventServer::get_id() {
   if (++current_id == 0)
     ++current_id;
   while (clients.find(current_id) != clients.end()) {

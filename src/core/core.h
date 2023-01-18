@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <typeindex>
@@ -31,3 +32,7 @@ typedef std::unordered_map<std::type_index,
                            std::pair<std::string, std::shared_ptr<ServiceBase>>>
     ServiceMap_t;
 typedef void (*create_service_t)(std::string, std::shared_ptr<Context>);
+
+typedef uint_fast8_t clientid_t;
+
+const clientid_t NULL_CLIENT_ID = 0;

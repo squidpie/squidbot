@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <memory>
 
+#include "core.h"
 #include "utils/uuid.h"
 
 const std::string EVENTNAMESPACE = "e4f3518e-9626-11ed-8ff0-00155d30393f";
@@ -13,15 +14,13 @@ struct DefaultEvents {
 
 static inline DefaultEvents EVENTS;
 
-const uint_fast64_t NULL_CLIENT_ID = 0;
-
 struct EventDataBase {
   virtual ~EventDataBase() {}
 };
 
 class Event {
 public:
-  uint_fast64_t source;
+  clientid_t source;
   uuid_t type;
   std::shared_ptr<EventDataBase> data;
 

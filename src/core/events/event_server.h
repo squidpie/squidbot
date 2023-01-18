@@ -20,10 +20,10 @@ struct SubEventData : virtual EventDataBase {
 };
 
 typedef std::unordered_map<
-    uint_fast64_t,
+    clientid_t,
     std::pair<std::shared_ptr<std::mutex>, std::shared_ptr<std::queue<Event>>>>
     ClientMap_t;
-typedef std::unordered_map<uuid_t, std::vector<uint_fast64_t>> SubMap_t;
+typedef std::unordered_map<uuid_t, std::vector<clientid_t>> SubMap_t;
 
 class EventServerRunActionContext : virtual public RunActionContextBase {
 public:
@@ -48,10 +48,10 @@ public:
 
 protected:
   void route_event(Event);
-  bool is_valid_route_event(uint_fast64_t, Event);
-  void send_to_client(uint_fast64_t, Event);
-  void destroy_client(uint_fast64_t, std::shared_ptr<std::mutex>);
-  void debug_dump(uint_fast64_t id, std::shared_ptr<std::mutex> qlock,
+  bool is_valid_route_event(clientid_t, Event);
+  void send_to_client(clientid_t, Event);
+  void destroy_client(clientid_t, std::shared_ptr<std::mutex>);
+  void debug_dump(clientid_t id, std::shared_ptr<std::mutex> qlock,
                   std::shared_ptr<std::queue<Event>> q) {
     std::cerr << ":: EventServer Dump ::" << std::endl;
     std::cerr << ":: current id = " << id << std::endl;
@@ -94,16 +94,16 @@ public:
 #endif
 
 protected:
-  void register_q(uint_fast64_t, std::shared_ptr<std::mutex>,
+  void register_q(clientid_t, std::shared_ptr<std::mutex>,
                   std::shared_ptr<std::queue<Event>>);
 
-  uint_fast64_t get_id();
+  clientid_t get_id();
 
   bool is_running = false;
   ClientMap_t clients;
   SubMap_t subscriptions;
 
-  uint_fast64_t current_id = 0;
+  clientid_t current_id = 0;
 
   std::shared_ptr<EventServerRunner_t> runner;
 };

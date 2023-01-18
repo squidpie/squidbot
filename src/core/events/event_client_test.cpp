@@ -8,7 +8,7 @@
 
 class EventClientTest : public testing::Test {
 protected:
-  uint_fast64_t id = 1;
+  clientid_t id = 1;
   std::shared_ptr<std::mutex> q_lock = std::make_shared<std::mutex>();
   std::shared_ptr<std::queue<Event>> q = std::make_shared<std::queue<Event>>();
 

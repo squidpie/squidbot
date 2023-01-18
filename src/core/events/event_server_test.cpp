@@ -24,12 +24,12 @@ protected:
   std::shared_ptr<std::mutex> qlock_a = std::make_shared<std::mutex>();
   std::shared_ptr<std::queue<Event>> q_a =
       std::make_shared<std::queue<Event>>();
-  uint_fast64_t id_a = 1;
+  clientid_t id_a = 1;
 
   std::shared_ptr<std::mutex> qlock_b = std::make_shared<std::mutex>();
   std::shared_ptr<std::queue<Event>> q_b =
       std::make_shared<std::queue<Event>>();
-  uint_fast64_t id_b = 2;
+  clientid_t id_b = 2;
 
   void SetUp() override {
     mock_client_map[id_a] = std::make_pair(qlock_a, q_a);

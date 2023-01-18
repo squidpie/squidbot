@@ -19,7 +19,7 @@ public:
 
 class EventClient : public EventClientBase {
 public:
-  EventClient(uint_fast64_t id, std::shared_ptr<std::mutex> qlock,
+  EventClient(clientid_t id, std::shared_ptr<std::mutex> qlock,
               std::shared_ptr<std::queue<Event>> q)
       : id(id), qlock(qlock), q(q) {}
   ~EventClient() {
@@ -34,7 +34,7 @@ protected:
   bool is_front_valid();
 
 private:
-  uint_fast64_t id;
+  clientid_t id;
   std::shared_ptr<std::mutex> qlock;
   std::shared_ptr<std::queue<Event>> q;
 };
