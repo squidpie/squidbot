@@ -5,40 +5,52 @@
 #include "event_server.h"
 
 void EventServerRunAction::run_action() {
-  std::for_each(clients->begin(), clients->end(), [this](auto entry) {
-    auto id = entry.first;
-    auto qlock = entry.second.first;
-    auto q = entry.second.second;
+  auto disconnect_id = NULL_CLIENT_ID;
 
-    // there exists a race condition where sometimes q  and/or qlock
-    // can be -0- at this point
-    if (qlock == nullptr || q == nullptr)
-      return;
+  std::for_each(
+      clients->begin(), clients->end(), [this, &disconnect_id](auto entry) {
+        auto id = entry.first;
+        auto qlock = entry.second.first;
+        auto q = entry.second.second;
 
-    const std::lock_guard<std::mutex> _lock(*qlock);
-    auto front_event = q->empty() ? NULL_EVENT : q->front();
+        /*                    :: WORKAROUND ::
+            there exists a race condition where sometimes q  and/or qlock
+            can be -0- at this point
+            IDEA: to properly resolve need to make clients a shared pointer in
+            EventServer and pass another mutex to EventServerRunAction
+        */
+        if (qlock == nullptr || q == nullptr)
+          return;
 
-    if (front_event.type == EVENTS.NULL_EVENT_TYPE) {
-      return;
-    } else if (front_event.type == SERVEREVENTS.SUBSCRIBE_EVENT_TYPE) {
-      q->pop();
-      auto data =
-          std::dynamic_pointer_cast<SubEventData>(front_event.data)->data;
-      (*subs)[data].push_back(id);
+        const std::lock_guard<std::mutex> _lock(*qlock);
+        auto front_event = q->empty() ? NULL_EVENT : q->front();
 
-    } else if (front_event.type == SERVEREVENTS.DISCONNECT_EVENT_TYPE) {
-      q->pop();
-      std::cerr << "DISCONNECT GOES HERE" << std::endl;
+        if (front_event.type == EVENTS.NULL_EVENT_TYPE) {
+          return;
 
-    } else if (front_event.source == id) {
-      q->pop();
-      route_event(front_event);
-    }
-  });
+        } else if (front_event.type == SERVEREVENTS.SUBSCRIBE_EVENT_TYPE) {
+          q->pop();
+          auto data =
+              std::dynamic_pointer_cast<SubEventData>(front_event.data)->data;
+          (*subs)[data].push_back(id);
+
+        } else if (front_event.type == SERVEREVENTS.DISCONNECT_EVENT_TYPE) {
+          disconnect_id = id;
+          q->pop();
+
+        } else if (front_event.source == id) {
+          q->pop();
+          route_event(front_event);
+        }
+      });
+
+  if (disconnect_id != NULL_CLIENT_ID) {
+    clients->erase(disconnect_id);
+  }
 }
 
 void EventServerRunAction::route_event(Event tx) {
-  auto event_subs = (*subs)[tx.type];
+  auto event_subs = subs->at(tx.type);
   std::for_each(event_subs.begin(), event_subs.end(), [this, tx](auto id) {
     if (is_valid_route_event(id, tx))
       send_to_client(id, tx);
@@ -46,9 +58,7 @@ void EventServerRunAction::route_event(Event tx) {
 }
 
 void EventServerRunAction::send_to_client(uint_fast64_t id, Event tx) {
-  auto qlock = (*clients)[id].first;
-  auto q = (*clients)[id].second;
-  // const std::lock_guard<std::mutex> _lock(*qlock);
+  auto q = clients->at(id).second;
   q->push(tx);
 }
 
@@ -69,5 +79,14 @@ std::shared_ptr<EventClientBase> EventServer::create_client() {
 void EventServer::register_q(uint_fast64_t id,
                              std::shared_ptr<std::mutex> qlock,
                              std::shared_ptr<std::queue<Event>> q) {
-  clients[id] = std::make_pair(qlock, q);
+  clients.insert({ id, std::make_pair(qlock, q) });
+}
+
+uint_fast64_t EventServer::get_id() {
+  if (++current_id == 0)
+    ++current_id;
+  while (clients.find(current_id) != clients.end()) {
+    ++current_id;
+  }
+  return current_id;
 }

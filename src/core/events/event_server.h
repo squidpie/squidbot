@@ -50,6 +50,7 @@ protected:
   void route_event(Event);
   bool is_valid_route_event(uint_fast64_t, Event);
   void send_to_client(uint_fast64_t, Event);
+  void destroy_client(uint_fast64_t, std::shared_ptr<std::mutex>);
   void debug_dump(uint_fast64_t id, std::shared_ptr<std::mutex> qlock,
                   std::shared_ptr<std::queue<Event>> q) {
     std::cerr << ":: EventServer Dump ::" << std::endl;
@@ -60,6 +61,7 @@ protected:
   }
   ClientMap_t *clients;
   SubMap_t *subs;
+  std::thread dthread;
 };
 
 typedef Runner<EventServerRunAction> EventServerRunner_t;
@@ -95,7 +97,7 @@ protected:
   void register_q(uint_fast64_t, std::shared_ptr<std::mutex>,
                   std::shared_ptr<std::queue<Event>>);
 
-  uint_fast64_t get_id() { return ++current_id; }
+  uint_fast64_t get_id();
 
   bool is_running = false;
   ClientMap_t clients;
