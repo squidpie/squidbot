@@ -23,7 +23,6 @@ protected:
       std::make_shared<std::vector<std::unique_ptr<std::thread>>>();
 
   void SetUp() override {
-    // dut = std::make_shared<PluginManager>();
     context = std::make_shared<CoreContext>(plog::get(), server,
                                             service_manager, dut, TEST_LIB_DIR);
     dut->inject(plugins, unload_threads);
