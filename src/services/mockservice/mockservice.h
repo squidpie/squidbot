@@ -57,6 +57,5 @@ public:
   typedef MockServiceExternalInterface external_interface_t;
   typedef MockServiceData data_t;
   static const uint service_version{MOCKSERVICE_VERSION};
+  static const uint core_version{CORE_VERSION};
 };
-
-typedef Service<MockService> MockService_t;

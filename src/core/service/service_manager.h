@@ -74,7 +74,6 @@ protected:
   std::shared_ptr<ServiceMap_t> services = std::make_shared<ServiceMap_t>();
   std::unique_ptr<LibLoader<ServiceLoader>> libloader;
 
-  std::shared_ptr<ServiceInterfaceBase> get_service_interface(std::type_index);
   bool is_service_available(std::type_index);
   void _unload(std::type_index) override;
   void _reload(std::shared_ptr<std::type_index>) override;
