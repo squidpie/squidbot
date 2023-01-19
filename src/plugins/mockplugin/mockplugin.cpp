@@ -21,6 +21,6 @@ InterfaceMap_t
 MockPlugin::create_interfaces(std::shared_ptr<CoreContext> context) {
   InterfaceMap_t interfaces;
   interfaces[std::type_index(typeid(MockService))] =
-      context->service_manager->get_interface<MockService>();
+      context->service_manager->get_interface<MockService>(MockService::service_version);
   return interfaces;
 }

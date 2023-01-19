@@ -20,16 +20,13 @@ public:
 
 class ServiceBase {
 public:
-  typedef RunActionBase run_action_t;
-  typedef ServiceDataBase data_t;
-  typedef ServiceInterfaceBase plugin_interface_t;
-  typedef ServiceInterfaceBase external_interface_t;
   ServiceBase() {}
   virtual ~ServiceBase() {}
 
   virtual void start() = 0;
   virtual void stop() = 0;
   virtual std::shared_ptr<ServiceInterfaceBase> get_interface() = 0;
+  virtual const uint core_version() = 0;
 };
 
 template <class S> class Service : virtual public ServiceBase {
@@ -49,17 +46,21 @@ public:
   }
   ~Service() { stop(); }
 
-  void start() { runner->start(); }
-  void stop() { runner->stop(); }
+  void start() override { runner->start(); }
+  void stop() override { runner->stop(); }
 
-  std::shared_ptr<ServiceInterfaceBase> get_interface() {
+  std::shared_ptr<ServiceInterfaceBase> get_interface() override {
     return std::make_shared<Pi>(data);
   }
 
+  const uint core_version() override { return S::core_version; }
+
+  #ifdef _GTEST_COMPILE
   void inject(std::shared_ptr<Runner<R>> _runner, std::shared_ptr<D> _data) {
     runner = _runner;
     data = _data;
   }
+  #endif
 
 protected:
   std::shared_ptr<Runner<R>> runner;

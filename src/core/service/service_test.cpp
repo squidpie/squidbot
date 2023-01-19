@@ -46,3 +46,7 @@ protected:
 };
 
 TEST_F(ServiceTest, start_stop) {}
+
+TEST_F(ServiceTest, core_version) {
+  EXPECT_TRUE(dut->core_version() == CORE_VERSION);
+}

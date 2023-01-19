@@ -2,15 +2,21 @@
 #include <mutex>
 #include <typeindex>
 
+#include "lib/core_version.h"
 #include "pluginmanager.h"
 #include "service.h"
 #include "service_manager.h"
 #include "utils/lib_loader.h"
 
 std::shared_ptr<ServiceInterfaceBase>
-ServiceManager::get_service_interface(std::type_index index) {
-  return services->at(index).second->get_interface();
-}
+ServiceManager::_get_interface(std::type_index index) {
+  if (!is_service_available(index)) {
+    PLOGE << "No Interface found";
+    return nullptr;
+  }
+  auto service = services->at(index).second;
+  return service->get_interface();
+};
 
 void ServiceManager::load(std::shared_ptr<CoreContext> _context) {
   context = _context;
@@ -24,6 +30,11 @@ void ServiceManager::load_service(std::string lib_name) {
 void ServiceManager::_register_service(
     const std::type_index index,
     std::pair<std::string, std::shared_ptr<ServiceBase>> entry) {
+  auto service = entry.second;
+  if (service->core_version() != CORE_VERSION) {
+    // LOG ERROR
+    return;
+  }
   services->insert({index, entry});
 }
 

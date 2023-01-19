@@ -38,13 +38,13 @@ protected:
 };
 
 TEST_F(ServiceManagerTest, mockservice_interface) {
-  auto mock_plugin_interface = dut->get_interface<MockService>();
+  auto mock_plugin_interface = dut->get_interface<MockService>(MockService::service_version);
   EXPECT_TRUE(mock_plugin_interface != nullptr);
   mock_plugin_interface->test();
 }
 
 TEST_F(ServiceManagerTest, null_interface) {
-  EXPECT_TRUE(dut->get_interface<MockCoreMockService>() == nullptr);
+  EXPECT_TRUE(dut->get_interface<MockCoreMockService>(MockCoreMockService::service_version) == nullptr);
 }
 
 TEST_F(ServiceManagerTest, service_unload_load) {

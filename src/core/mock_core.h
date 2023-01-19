@@ -80,6 +80,8 @@ public:
   typedef MockCoreExternalInterface external_interface_t;
   MockCoreMockService() {}
   ~MockCoreMockService() {}
+  static const uint service_version{0};
+  static const uint core_version{CORE_VERSION};
 };
 
 class MockCorePluginAction : virtual public PluginActionBase {
@@ -112,6 +114,7 @@ public:
     InterfaceMap_t empty;
     return empty;
   }
+  static const uint core_version{CORE_VERSION};
 };
 
 class MockCorePluginManager : virtual public PluginManagerBase {
