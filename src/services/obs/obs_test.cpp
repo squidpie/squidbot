@@ -45,7 +45,6 @@ protected:
 
 
   void SetUp() {
-    plog::init(plog::debug, "mock.log");
     Context_t context = { plog::get(), &mock_event_server };
 
     ON_CALL(mock_event_server, create_client())

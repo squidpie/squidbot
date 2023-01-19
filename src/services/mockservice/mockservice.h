@@ -19,6 +19,7 @@ public:
 
 protected:
   std::shared_ptr<MockServiceData> data;
+  uint count{0};
 };
 
 class MockServiceExternalInterface : virtual public ServiceInterfaceBase {
