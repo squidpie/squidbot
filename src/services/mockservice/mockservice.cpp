@@ -1,7 +1,8 @@
 #include "mockservice.h"
 
 void MockServicePluginInterface::test()  {
-  PLOGD << "TEST OUTPUT :: MockService test()";
+  static uint test = 0;
+  PLOGD << "TEST OUTPUT :: MockService test() " << test++;
 }
 
 void MockServiceRunAction::run_action() {

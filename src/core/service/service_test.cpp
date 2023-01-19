@@ -27,8 +27,6 @@ protected:
   std::shared_ptr<Service<MockCoreMockService>> dut;
 
   void SetUp() override {
-    plog::init(plog::debug, "mock.log");
-
     std::shared_ptr<CoreContext> context = std::make_shared<CoreContext>(
         plog::get(), event_server, service_manager, plugin_manager,
         TEST_LIB_DIR);

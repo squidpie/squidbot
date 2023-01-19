@@ -3,15 +3,15 @@
 AdminAction::AdminAction(InterfaceMap_t *_interfaces,
                          std::shared_ptr<PluginDataBase>)
     : interfaces(_interfaces) {
-  mockservice = std::dynamic_pointer_cast<MockServicePluginInterface>(
-      interfaces->at(std::type_index(typeid(MockService))));
+  //mockservice = std::dynamic_pointer_cast<MockServicePluginInterface>(
+  //    interfaces->at(std::type_index(typeid(MockService))));
 }
 
 bool AdminFilter::is_trigger(Event rx) {
   return (rx.type == EVENTS.TEST_EVENT_TYPE);
 }
 
-void AdminAction::trigger_action(Event rx) { mockservice->test(); }
+void AdminAction::trigger_action(Event rx) { }//mockservice->test(); }
 
 /*
 create_interfaces : load the interface map with all interfaces the

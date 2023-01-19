@@ -8,6 +8,7 @@
 #include "utils/defines.h"
 
 #include "mockservice/mockservice.h"
+#include "admin/admin.h"
 
 int main(int argc, char **argv) {
   plog::init(plog::debug, "squidbot.log");
@@ -19,7 +20,7 @@ int main(int argc, char **argv) {
       plog::get(), event_server, service_manager, plugin_manager, LIB_DIR);
   service_manager->load(context);
   plugin_manager->load(context);
-  service_manager->reload_service<MockService>();
+  plugin_manager->reload_plugin<Admin>();
   plugin_manager->unload();
   service_manager->unload();
 }

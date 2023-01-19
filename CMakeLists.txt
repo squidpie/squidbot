@@ -30,17 +30,18 @@ message(STATUS "plog is loaded at " ${LIB_PLOG})
 
 include_directories(
     ${LIB_PLOG}
-    ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/core
+    ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/core ${CMAKE_SOURCE_DIR}/src/logging
     ${CMAKE_SOURCE_DIR}/src/core/service ${CMAKE_SOURCE_DIR}/src/core/events
     ${CMAKE_SOURCE_DIR}/src/core/runner ${CMAKE_SOURCE_DIR}/src/core/plugin
     ${CMAKE_SOURCE_DIR}/src/services ${CMAKE_SOURCE_DIR}/src/plugins)
 
-add_subdirectory(src/core)
 add_subdirectory(src)
+add_subdirectory(src/core)
 #add_subdirectory(src/services/obs)
 add_subdirectory(src/services/mockservice)
 add_subdirectory(src/plugins/mockplugin)
 add_subdirectory(src/plugins/admin)
+add_subdirectory(src/logging/logger)
 
 # Google Test Stuff
 FetchContent_Declare(
@@ -56,7 +57,8 @@ enable_testing()
 
 add_executable(
     squidtest
-    src/squidbot_test.cpp
+    src/gtest_main.cpp
+    src/squidbot_test.cpp src/logging/logging.cpp
     ${CORE_TEST_SOURCES} ${MOCK_SERVICE_SOURCES} ${MOCKPLUGIN_SOURCES})
 
 target_link_libraries(
@@ -69,7 +71,7 @@ target_link_libraries(
     PRIVATE
     gtest
     gmock
-    gtest_main
+    #gtest_main
     ${CMAKE_DL_LIBS})
 
 set_target_properties(

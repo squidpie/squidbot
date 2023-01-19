@@ -19,6 +19,7 @@ public:
 
 protected:
   std::shared_ptr<MockServiceData> data;
+  uint count{0};
 };
 
 class MockServiceExternalInterface : virtual public ServiceInterfaceBase {
@@ -40,6 +41,7 @@ class MockServiceRunAction : virtual public RunActionBase {
 public:
   typedef MockServiceRunActionContext context_t;
   MockServiceRunAction(std::shared_ptr<MockServiceRunActionContext> context) {
+    PLOGD << "MockServiceRunActionContext Create";
     event_client = context->event_client;
     mock_data = context->mock_data;
   }
