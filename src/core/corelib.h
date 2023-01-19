@@ -4,6 +4,7 @@
 #include "event_server.h"
 #include "events.h"
 #include "lib/core_context.h"
+#include "lib/core_version.h"
 #include "plugin.h"
 #include "pluginmanager.h"
 #include "runner.h"

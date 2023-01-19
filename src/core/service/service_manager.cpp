@@ -8,6 +8,16 @@
 #include "utils/lib_loader.h"
 
 std::shared_ptr<ServiceInterfaceBase>
+ServiceManager::_get_interface(std::type_index index) {
+  if (!is_service_available(index)) {
+    PLOGE << "No Interface found";
+    return nullptr;
+  }
+  auto service = services->at(index).second;
+  return service->get_interface();
+};
+
+std::shared_ptr<ServiceInterfaceBase>
 ServiceManager::get_service_interface(std::type_index index) {
   return services->at(index).second->get_interface();
 }

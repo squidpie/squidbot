@@ -51,3 +51,7 @@ TEST_F(PluginTest, context_construct) {
 TEST_F(PluginTest, dependency) {
   EXPECT_TRUE(dut.is_dependent(std::type_index(typeid(MockCoreMockService))));
 }
+
+TEST_F(PluginTest, core_version) {
+  EXPECT_TRUE(dut.core_version() == CORE_VERSION);
+}

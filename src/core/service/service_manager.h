@@ -21,7 +21,11 @@ public:
   Caller must check for nullptr
    */
   template <class T>
-  std::shared_ptr<typename T::plugin_interface_t> get_interface() {
+  std::shared_ptr<typename T::plugin_interface_t> get_interface(const uint plugin_version) {
+    if (plugin_version != T::service_version) {
+      // LOG ERROR
+      return nullptr;
+    }
     return std::dynamic_pointer_cast<typename T::plugin_interface_t>(
         _get_interface(std::type_index(typeid(T))));
   }
@@ -59,13 +63,7 @@ public:
       std::pair<std::string, std::shared_ptr<ServiceBase>>) override;
 
   std::shared_ptr<ServiceInterfaceBase>
-  _get_interface(std::type_index index) override {
-    if (!is_service_available(index)) {
-      PLOGE << "No Interface found";
-      return nullptr;
-    }
-    return get_service_interface(index);
-  };
+  _get_interface(std::type_index index) override;
 
 #ifdef _GTEST_COMPILE
   void inject(auto _services) { services = _services; }

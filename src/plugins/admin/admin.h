@@ -27,4 +27,5 @@ public:
   Admin(std::shared_ptr<EventClientBase>) {}
   ~Admin() {}
   InterfaceMap_t create_interfaces(std::shared_ptr<CoreContext>);
+  static const uint core_version{CORE_VERSION};
 };

@@ -9,6 +9,10 @@ void PluginManager::load(std::shared_ptr<CoreContext> context) {
 void PluginManager::_register_plugin(
     std::type_index index,
     std::pair<std::string, std::shared_ptr<PluginBase>> entry) {
+  if (entry.second->core_version() != CORE_VERSION) {
+    // LOG THE ERROR
+    return;
+  }
   plugins->insert({index, entry});
 }
 

@@ -20,10 +20,6 @@ public:
 
 class ServiceBase {
 public:
-  typedef RunActionBase run_action_t;
-  typedef ServiceDataBase data_t;
-  typedef ServiceInterfaceBase plugin_interface_t;
-  typedef ServiceInterfaceBase external_interface_t;
   ServiceBase() {}
   virtual ~ServiceBase() {}
 
@@ -56,10 +52,12 @@ public:
     return std::make_shared<Pi>(data);
   }
 
+  #ifdef _GTEST_COMPILE
   void inject(std::shared_ptr<Runner<R>> _runner, std::shared_ptr<D> _data) {
     runner = _runner;
     data = _data;
   }
+  #endif
 
 protected:
   std::shared_ptr<Runner<R>> runner;

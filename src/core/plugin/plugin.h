@@ -4,6 +4,7 @@
 #include "event_server.h"
 #include "events.h"
 #include "lib/core_context.h"
+#include "lib/core_version.h"
 #include "pluginmanager.h"
 #include "runner.h"
 
@@ -67,6 +68,7 @@ public:
   virtual void stop() = 0;
   virtual void reload() = 0;
   virtual bool is_dependent(std::type_index) = 0;
+  virtual const uint core_version() = 0;
 };
 
 template <class P> class Plugin : public virtual PluginBase {
@@ -88,6 +90,7 @@ public:
   bool is_dependent(std::type_index index) override {
     return (interfaces.find(index) != interfaces.end());
   }
+  const uint core_version() override { return P::core_version; }
 
 #ifdef _GTEST_COMPILE
   void inject(std::shared_ptr<RunnerBase> _runner, InterfaceMap_t _interfaces) {

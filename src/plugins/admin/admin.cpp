@@ -19,7 +19,7 @@ trigger_action will require to interact with
  */
 InterfaceMap_t Admin::create_interfaces(std::shared_ptr<CoreContext> context) {
   InterfaceMap_t interfaces;
-  interfaces[std::type_index(typeid(MockService))] =
-      context->service_manager->get_interface<MockService>();
+  interfaces.insert({std::type_index(typeid(MockService)),
+                     context->service_manager->get_interface<MockService>(MockService::service_version)});
   return interfaces;
 }

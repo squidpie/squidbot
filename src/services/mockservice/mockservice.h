@@ -1,6 +1,7 @@
 #pragma once
 
 #include "./events.h"
+#include "./version.h"
 #include "corelib.h"
 
 class MockServiceData : virtual public ServiceDataBase {
@@ -55,6 +56,7 @@ public:
   typedef MockServicePluginInterface plugin_interface_t;
   typedef MockServiceExternalInterface external_interface_t;
   typedef MockServiceData data_t;
+  static const uint service_version{MOCKSERVICE_VERSION};
 };
 
 typedef Service<MockService> MockService_t;
