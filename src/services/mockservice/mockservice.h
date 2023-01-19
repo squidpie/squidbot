@@ -41,7 +41,6 @@ class MockServiceRunAction : virtual public RunActionBase {
 public:
   typedef MockServiceRunActionContext context_t;
   MockServiceRunAction(std::shared_ptr<MockServiceRunActionContext> context) {
-    PLOGD << "MockServiceRunActionContext Create";
     event_client = context->event_client;
     mock_data = context->mock_data;
   }

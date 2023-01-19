@@ -1,6 +1,6 @@
 # Main Build settings
 
-set(SOURCE_FILES squidbot.cpp)
+set(SOURCE_FILES squidbot.cpp logging/logging.cpp)
 
 add_executable(
     squidbot
