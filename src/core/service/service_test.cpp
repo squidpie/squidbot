@@ -1,3 +1,8 @@
+/*
+service_test.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 

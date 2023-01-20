@@ -1,3 +1,8 @@
+/*
+plugin_test.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include <gtest/gtest.h>
 
 #include "event_server.h"

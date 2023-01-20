@@ -1,7 +1,9 @@
 /*
         SQUIDBOT
         STREAM AUTOMATION FRAMEWORK
- */
+        Copyright (C) 2023  Squidpie
+*/
+
 #include <signal.h>
 
 #include "corelib.h"

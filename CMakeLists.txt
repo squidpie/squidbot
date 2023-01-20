@@ -1,3 +1,6 @@
+# CMakeLists.txt
+# Copyright (C) 2023  Squidpie
+
 cmake_minimum_required(VERSION 3.18.4)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -fPIC -fsanitize=address")
 

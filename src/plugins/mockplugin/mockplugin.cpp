@@ -1,3 +1,8 @@
+/*
+mockplugin.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include "mockplugin.h"
 
 MockPluginAction::MockPluginAction(InterfaceMap_t *_interfaces,

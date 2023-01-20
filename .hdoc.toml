@@ -1,3 +1,6 @@
+# .hdoc.toml
+# Copyright (C) 2023  Squidpie
+ 
 [project]
 name = "Squidbot"
 version = "0.0.0"

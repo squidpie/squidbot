@@ -1,3 +1,8 @@
+/*
+defines.h
+Copyright (C) 2023  Squidpie
+ */
+
 #pragma once
 
 #include <string>

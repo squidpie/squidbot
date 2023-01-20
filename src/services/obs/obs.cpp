@@ -1,3 +1,8 @@
+/*
+obs.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include "obs.h"
 #include "events.h"
 

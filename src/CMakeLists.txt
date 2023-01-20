@@ -1,3 +1,6 @@
+# CMakeLists.txt
+# Copyright (C) 2023  Squidpie
+
 # Main Build settings
 
 set(SOURCE_FILES squidbot.cpp logging/logging.cpp)

@@ -1,3 +1,8 @@
+/*
+gtest_main.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include <gtest/gtest.h>
 
 #include "logging.h"

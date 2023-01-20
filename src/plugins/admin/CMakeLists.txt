@@ -1,3 +1,6 @@
+# CMakeLists.txt
+# Copyright (C) 2023  Squidpie
+
 add_library(
     admin
     SHARED

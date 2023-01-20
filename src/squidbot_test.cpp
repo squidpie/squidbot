@@ -1,3 +1,8 @@
+/*
+squidbot_test.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include <gtest/gtest.h>
 
 #include "corelib.h"

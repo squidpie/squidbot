@@ -1,3 +1,8 @@
+/*
+event_client_test.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include <cstdint>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>

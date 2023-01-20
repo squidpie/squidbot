@@ -1,3 +1,7 @@
+<!--
+    README.md
+    Copyright (C) 2023  Squidpie
+-->
 # squidbot
 Stream Automation Framework
 
@@ -24,7 +28,7 @@ Plugins can interface with Services to acquire and modify external data.
 
 ## Documentation
 ### Source
-[Squidbot hdoc](https://docs.hdoc.io/squidpie/Squidbot/index.html)
+Source documentation is generated using hdoc: [Squidbot hdoc](https://docs.hdoc.io/squidpie/Squidbot/index.html)
 
 ## Setup
 ### Installation

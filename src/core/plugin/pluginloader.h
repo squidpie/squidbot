@@ -1,3 +1,8 @@
+/*
+pluginloader.h
+Copyright (C) 2023  Squidpie
+ */
+
 #pragma once
 
 #include "utils/lib_loader.h"
