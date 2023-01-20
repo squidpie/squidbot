@@ -1,3 +1,8 @@
+/*
+loggin.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include "logging.h"
 
 namespace fs = std::filesystem;

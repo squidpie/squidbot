@@ -1,3 +1,8 @@
+/*
+event_server.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include <algorithm>
 #include <cstdint>
 #include <unistd.h>

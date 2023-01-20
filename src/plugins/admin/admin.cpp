@@ -1,3 +1,8 @@
+/*
+admin.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include "admin.h"
 
 AdminAction::AdminAction(InterfaceMap_t *_interfaces,

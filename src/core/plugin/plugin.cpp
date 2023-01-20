@@ -1,3 +1,8 @@
+/*
+plugin.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include "plugin.h"
 
 void PluginRunAction::run_action() {

@@ -1,3 +1,8 @@
+/*
+logging.h
+Copyright (C) 2023  Squidpie
+ */
+
 #pragma once
 
 #include "plog/Initializers/RollingFileInitializer.h"

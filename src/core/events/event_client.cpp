@@ -1,3 +1,8 @@
+/*
+event_client.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include "event_client.h"
 #include "event_server.h"
 

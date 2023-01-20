@@ -1,3 +1,8 @@
+/*
+service_manager.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include <condition_variable>
 #include <mutex>
 #include <typeindex>

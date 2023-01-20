@@ -1,3 +1,8 @@
+/*
+pluginmanager.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include "pluginmanager.h"
 #include "plugin.h"
 

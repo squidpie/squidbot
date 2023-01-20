@@ -1,3 +1,8 @@
+/*
+plog_init.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include <memory>
 
 #include "lib/core_context.h"

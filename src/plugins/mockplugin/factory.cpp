@@ -1,3 +1,8 @@
+/*
+factory.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include "mockplugin.h"
 
 // Factory

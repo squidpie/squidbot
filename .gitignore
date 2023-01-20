@@ -1,3 +1,6 @@
+# .gitignore
+# Copyright (C) 2023  Squidpie
+
 # Prerequisites
 *.d
 
@@ -50,3 +53,6 @@ targets/
 
 # External Libs
 external/
+
+# Random stuff
+notes.txt

@@ -1,3 +1,8 @@
+/*
+mockservice.cpp
+Copyright (C) 2023  Squidpie
+ */
+
 #include "mockservice.h"
 
 void MockServicePluginInterface::test()  {

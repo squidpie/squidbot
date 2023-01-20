@@ -1,3 +1,6 @@
+# CMakeLists.txt
+# Copyright (C) 2023  Squidpie
+
 link_directories(runner events service plugin)
 add_subdirectory(runner)
 add_subdirectory(events)
