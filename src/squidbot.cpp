@@ -16,8 +16,14 @@
 static bool is_main_running{true};
 
 int main(int argc, char **argv) {
+  auto squidbot_lib_dir = std::getenv("SQUIDBOT_LIB_DIR");
+  if (!squidbot_lib_dir) {
+    std::cerr << "Unable to load ${SQUIDBOT_LIB_DIR}" << std::endl;
+    exit(1);
+  }
+
   plog::init(plog::debug, "squidbot.log");
-  plog_shared_init(plog::debug, plog::get(), LIB_DIR);
+  plog_shared_init(plog::debug, plog::get(), squidbot_lib_dir);
   PLOGD << "Logging Initialized";
 
   // capture ctrl-c to exit program
@@ -25,12 +31,6 @@ int main(int argc, char **argv) {
     PLOGD << "Exit on sigint " << signum;
     is_main_running = false;
   });
-
-  auto squidbot_lib_dir = std::getenv("SQUIDBOT_LIB_DIR");
-  if (!squidbot_lib_dir) {
-    std::cerr << "Unable to load ${SQUIDBOT_LIB_DIR}" << std::endl;
-    exit(1);
-  }
 
   auto event_server = std::make_shared<EventServer>();
   auto plugin_manager = std::make_shared<PluginManager>();
@@ -53,8 +53,8 @@ int main(int argc, char **argv) {
   plugin_manager->reload_plugin<Admin>();
 
   // Main Loop
-  while(is_main_running){ sleep(1); }
-  std::cout << std::endl; // courtsey newline
+  while (is_main_running) { pause(); }
+  std::cout << std::endl; // courtesy newline
 
   // Unload
   PLOGD << "Stopping Event Server";
