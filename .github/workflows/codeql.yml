@@ -27,7 +27,7 @@ jobs:
         cmake --build ./targets
 
     - name: Perform analysis
-      uses: github/codeql-action/analyze@v1.1
+      uses: github/codeql-action/analyze@v1
 
     - name: Generate report
       uses: awshole/codeql-report@v1.1
