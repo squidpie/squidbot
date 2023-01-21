@@ -22,9 +22,9 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name:  Build target
-             run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -S. -B./targets/
-          cmake --build ./targets
+      run: |
+        cmake -DCMAKE_BUILD_TYPE=Release -S. -B./targets/
+        cmake --build ./targets
 
     - name: Perform analysis
       uses: github/codeql-action/analyze@v1.1
