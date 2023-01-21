@@ -56,3 +56,4 @@ external/
 
 # Random stuff
 notes.txt
+clang_tidy_output.yml
