@@ -3,6 +3,7 @@
 
 cmake_minimum_required(VERSION 3.18.4)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -fPIC -fsanitize=address")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -fPIC")
 
 project(Squidbot
         VERSION 1
@@ -58,11 +59,35 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+set_target_properties(
+  gtest
+  PROPERTIES
+  EXCLUDE_FROM_ALL True)
+
+set_target_properties(
+  gmock
+  PROPERTIES
+  EXCLUDE_FROM_ALL True)
+
+set_target_properties(
+  gtest_main
+  PROPERTIES
+  EXCLUDE_FROM_ALL True)
+
+set_target_properties(
+  gmock_main
+  PROPERTIES
+  EXCLUDE_FROM_ALL True)
+
 add_executable(
     squidtest
     src/gtest_main.cpp
     src/squidbot_test.cpp src/logging/logging.cpp
     ${CORE_TEST_SOURCES} ${MOCK_SERVICE_SOURCES} ${MOCKPLUGIN_SOURCES})
+
+add_dependencies(
+  squidtest
+  ploginit mockservice mockplugin gtest gmock gtest_main gmock_main)
 
 target_link_libraries(
     squidtest
@@ -80,9 +105,10 @@ target_link_libraries(
 set_target_properties(
     squidtest
     PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/test"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/test"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/test")
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/"
+    EXCLUDE_FROM_ALL True)
 
 target_compile_definitions(
     squidtest
