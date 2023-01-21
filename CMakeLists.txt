@@ -1,7 +1,7 @@
 # CMakeLists.txt
 # Copyright (C) 2023  Squidpie
 
-cmake_minimum_required(VERSION 3.18.4)
+cmake_minimum_required(VERSION 3.25)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -fPIC -fsanitize=address")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -fPIC")
 
@@ -24,11 +24,13 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
 include(FetchContent)
+
 FetchContent_Declare(
     plog
     URL https://github.com/SergiusTheBest/plog/archive/refs/heads/master.zip
-)
-FetchContent_Populate(plog)
+    SYSTEM)
+FetchContent_MakeAvailable(plog)
+
 set(LIB_PLOG ${plog_SOURCE_DIR}/include)
 message(STATUS "plog is loaded at " ${LIB_PLOG})
 

@@ -5,7 +5,6 @@ Copyright (C) 2023  Squidpie
 
 #pragma once
 
-#include "plog/Appenders/IAppender.h"
 #include <dlfcn.h>
 #include <filesystem>
 #include <iostream>
