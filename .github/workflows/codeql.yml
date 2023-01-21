@@ -1,0 +1,35 @@
+name: codeql-analysis
+on:
+  pull_request:
+    branches: [dev]
+  workflow_dispatch:
+
+jobs:
+  codeql-analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'c++' ]
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Init CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+
+    - name:  Build target
+             run: |
+          cmake -DCMAKE_BUILD_TYPE=Release -S. -B./targets/
+          cmake --build ./targets
+
+    - name: Perform analysis
+      uses: github/codeql-action/analyze@v1.1
+
+    - name: Generate report
+      uses: awshole/codeql-report@v1.1
+      with:
+        github_issue_assignee: 'squidpie'
