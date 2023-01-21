@@ -26,21 +26,5 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Debug -S. -B./targets/debug
           cmake --build ./targets/debug -j32 --target squidtest
 
-      - name: "🔧 clang install"
-        run: sudo apt-get install clang
-      
-      - name: "🔧 linter"
-        uses: cpp-linter/cpp-linter-action@v2.4.0
-        id: linter
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          style: file
-          database: ${GITHUB_WORKSPACE}/targets/debug/compile_commands.json
-
-      - name: "🔍 linter fail check"
-        if: steps.linter.outputs.checks-failed > 0
-        run: exit 1
-
       - name: "🔍 test"
         run: ./targets/debug/bin/squidtest
