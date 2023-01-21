@@ -25,7 +25,10 @@ jobs:
         run: |
           cmake -DCMAKE_BUILD_TYPE=Debug -S. -B./targets/debug
           cmake --build ./targets/debug -j32 --target squidtest
-        
+
+      - name: "Install clang"
+        run: apt-get install clang
+      
       - name: "🔧 linter"
         uses: cpp-linter/cpp-linter-action@v2.4.0
         id: linter
