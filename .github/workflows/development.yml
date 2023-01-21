@@ -18,21 +18,25 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 10
     steps:
-      -name: "☁️ checkout"
-      uses: actions/checkout@v3
+      - name: "☁️ checkout"
+      - uses: actions/checkout@v3
 
-      -name:  "🔧 build"
+      - name:  "🔧 build"
       run: |
         cmake -DCMAKE_BUILD_TYPE=Debug -S. -B./targets/
         cmake --build ./targets -j16
         
-      -name: "🔍 linting"
-      uses: cpp-linter/cpp-linter-action@v2
+      - name: "🔍 linting"
+      - uses: cpp-linter/cpp-linter-action@v2
       id: linter
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         style: file
 
-      -name: "🔍 test"
+      - name: "linting fail check"
+        if: steps.linter.outputs.checks-failed > 0
+        run: echo "DEBUG OUTPUT LINTING FAILED"
+
+      - name: "🔍 test"
       run: ./targets/bin/test/squidtest
