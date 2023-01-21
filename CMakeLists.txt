@@ -27,8 +27,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     plog
-    URL https://github.com/SergiusTheBest/plog/archive/refs/heads/master.zip
-    SYSTEM)
+    URL https://github.com/SergiusTheBest/plog/archive/refs/heads/master.zip)
 FetchContent_MakeAvailable(plog)
 
 set(LIB_PLOG ${plog_SOURCE_DIR}/include)
