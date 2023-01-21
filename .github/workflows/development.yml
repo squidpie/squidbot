@@ -14,20 +14,25 @@ on:
 
 jobs:
   test:
-      name: Squidtest
-      runs-on: self-hosted
-      timeout-minutes: 10
-      steps:
-        -name: "☁️ checkout"
-        uses: actions/checkout@v3
+    name: Squidtest
+    runs-on: self-hosted
+    timeout-minutes: 10
+    steps:
+      -name: "☁️ checkout"
+      uses: actions/checkout@v3
 
-        -name:  "🔧 build"
-        run: |
-          cmake -DCMAKE_BUILD_TYPE=Debug -S. -B./targets/
-          cmake --build ./targets -j16
+      -name:  "🔧 build"
+      run: |
+        cmake -DCMAKE_BUILD_TYPE=Debug -S. -B./targets/
+        cmake --build ./targets -j16
         
-        -name: "🔍 linting"
-        uses: cpp-linter/cpp-linter-action@v2
+      -name: "🔍 linting"
+      uses: cpp-linter/cpp-linter-action@v2
+      id: linter
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        style: file
 
-        -name: "🔍 test"
-        run: ./targets/bin/test/squidtest
+      -name: "🔍 test"
+      run: ./targets/bin/test/squidtest
