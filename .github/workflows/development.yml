@@ -33,6 +33,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           style: file
+          database: ${GITHUB_WORKSPACE}/targets/debug/compile_commands.json
 
       - name: "🔍 linter fail check"
         if: steps.linter.outputs.checks-failed > 0
