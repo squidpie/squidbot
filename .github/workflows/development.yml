@@ -27,7 +27,7 @@ jobs:
           cmake --build ./targets
         
       - name: "🔧 linting"
-        uses: cpp-linter/cpp-linter-action@v2
+        uses: cpp-linter/cpp-linter-action@v2.4.0
         id: linter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
 
       - name: "🔍 linting fail check"
         if: steps.linter.outputs.checks-failed > 0
-        run: echo "DEBUG OUTPUT LINTING FAILED"
+        run: exit 1
 
       - name: "🔍 test"
         run: ./targets/bin/test/squidtest
