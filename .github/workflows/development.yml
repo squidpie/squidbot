@@ -15,7 +15,7 @@ on:
 jobs:
   test:
     name: Squidtest
-    runs-on: self-hosted
+    runs-on: ubunutu-latest
     timeout-minutes: 10
     steps:
       - name: "☁️ checkout"
