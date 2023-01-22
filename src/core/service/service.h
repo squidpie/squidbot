@@ -44,7 +44,6 @@ public:
 
   Service() {}
   Service(std::shared_ptr<CoreContext> context) {
-    PLOGD << "Service Constructor";
     auto client = context->event_server->create_client();
     client->subscribe(EVENTS.TEST_EVENT_TYPE);
     runner = std::make_shared<Runner<R>>(std::make_shared<Rc>(client, data));

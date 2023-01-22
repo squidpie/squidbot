@@ -11,7 +11,7 @@
 #include "utils/defines.h"
 
 #include "admin/admin.h"
-#include "mockservice/mockservice.h"
+//#include "mockservice/mockservice.h"
 
 static bool is_main_running{true};
 
@@ -24,11 +24,11 @@ int main(int argc, char **argv) {
 
   plog::init(plog::debug, "squidbot.log");
   plog_shared_init(plog::debug, plog::get(), squidbot_lib_dir);
-  PLOGD << "Logging Initialized";
+  PLOGI << "Logging Initialized";
 
   // capture ctrl-c to exit program
   signal(SIGINT, [](int signum){
-    PLOGD << "Exit on sigint " << signum;
+    PLOGI << "Exit on sigint " << signum;
     is_main_running = false;
   });
 
@@ -40,11 +40,12 @@ int main(int argc, char **argv) {
   std::shared_ptr<CoreContext> context = std::make_shared<CoreContext>(
       plog::get(), event_server, service_manager, plugin_manager, squidbot_lib_dir);
 
-  PLOGD << "Starting Event Server";
+  PLOGI << "Starting Event Server";
   event_server->start();
 
-  PLOGD << "Loading context";
+  PLOGI << "Loading Services";
   service_manager->load(context);
+  PLOGI << "Loading Plugins";
   plugin_manager->load(context);
 
   // reload_plugin is not intended to be called in such a manner
@@ -53,14 +54,16 @@ int main(int argc, char **argv) {
   plugin_manager->reload_plugin<Admin>();
 
   // Main Loop
+  std::cout << "Running..." << std::endl;
   while (is_main_running) { pause(); }
   std::cout << std::endl; // courtesy newline
 
   // Unload
-  PLOGD << "Stopping Event Server";
+  PLOGI << "Stopping Event Server";
   event_server->stop();
 
-  PLOGD << "Unloading Context";
+  PLOGI << "Unloading Plugins";
   plugin_manager->unload();
+  PLOGI << "Unloading Services";
   service_manager->unload();
 }

@@ -9,6 +9,7 @@ Copyright (C) 2023  Squidpie
 #include <filesystem>
 #include <iostream>
 #include <stdexcept>
+#include <unordered_map>
 
 #include "logging.h"
 #include "utils/context.h"
@@ -24,7 +25,12 @@ public:
   LibLoader(std::shared_ptr<Context> context) : context(context) {
     load_all(context->lib_dir + std::string(L::lib));
   }
-  ~LibLoader() {}
+  ~LibLoader() {
+    for (const auto& [key, handle] : libs) {
+      PLOGD << "Closing handle " << key;
+      dlclose(handle);
+    }
+  }
 
   void load_all(std::string dir) {
     if (!fs::exists(dir)) {
@@ -47,9 +53,9 @@ public:
   void load_lib(std::string lib_path) {
     PLOGD << "loading lib " << lib_path;
 
-    void *handle = dlopen(lib_path.c_str(), RTLD_LAZY);
+    void *handle = dlopen(lib_path.c_str(), RTLD_NOW | RTLD_DEEPBIND);
     const char *dlsym_error = dlerror();
-    if (dlsym_error) {
+    if (dlsym_error || handle == nullptr) {
       LOGE << "Failed to open lib_path";
       throw std::runtime_error(dlsym_error);
     }
@@ -58,6 +64,7 @@ public:
     dlsym_error = dlerror();
     if (dlsym_error) {
       LOGE << "Failed to link create function";
+      dlclose(handle);
       throw std::runtime_error(dlsym_error);
     }
 
@@ -65,12 +72,18 @@ public:
       create(lib_path, context);
     } catch (const std::runtime_error &err) {
       LOGE << "Failed to create object";
+      dlclose(handle);
       throw std::runtime_error(err.what());
     }
-
-    dlclose(handle);
+    if (libs.find(lib_path) != libs.end()) {
+      auto _handle = libs.at(lib_path);
+      dlclose(_handle);
+      libs.erase(lib_path);
+    }
+    libs.insert({lib_path, handle});
   }
 
 protected:
   std::shared_ptr<Context> context;
+  std::unordered_map<std::string, void*> libs;
 };

@@ -5,8 +5,8 @@ Copyright (C) 2023  Squidpie
 
 #pragma once
 
-#include "./events.h"
-#include "./version.h"
+#include "mockservice/events.h"
+#include "mockservice/version.h"
 #include "corelib.h"
 
 class MockServiceData : virtual public ServiceDataBase {

@@ -12,6 +12,8 @@ Copyright (C) 2023  Squidpie
 #include <mutex>
 #include <thread>
 
+#include "logging.h"
+
 class RunActionContextBase {
 public:
   RunActionContextBase() {}
@@ -43,14 +45,17 @@ public:
   ~Runner() { stop(); }
 
   void start() {
+    PLOGD << "Runner start";
     set_running(true);
     thread_handle = std::make_unique<std::thread>(&Runner::thread_loop, this);
   }
 
   void stop() {
     set_running(false);
-    if (thread_handle)
+    if (thread_handle) {
+      PLOGD << "Stopping thread_loop";
       thread_handle->join();
+    }
     thread_handle.reset();
   }
 
@@ -60,6 +65,7 @@ public:
 
 private:
   void thread_loop() {
+    PLOGD << "Starting thread_loop";
     while (is_running()) {
       run_action->run_action();
     }
