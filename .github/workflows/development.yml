@@ -16,7 +16,7 @@ on:
 jobs:
   test:
     name: Squidtest
-    runs-on: ubuntu-bionic
+    runs-on: ubuntu-18.04
     timeout-minutes: 10
     steps:
       - name: "☁️ checkout"
