@@ -5,6 +5,7 @@ Copyright (C) 2023 Squidpie
  
 #pragma once
 
+#include "adminservice/events.h"
 #include "adminservice/version.h"
 #include "corelib.h"
 
