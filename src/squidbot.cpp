@@ -11,7 +11,6 @@
 #include "utils/defines.h"
 
 #include "admin/admin.h"
-//#include "mockservice/mockservice.h"
 
 static bool is_main_running{true};
 
@@ -33,7 +32,7 @@ int main(int argc, char **argv) {
   PLOGI << "Logging Initialized";
 
   // capture ctrl-c to exit program
-  signal(SIGINT, [](int signum){
+  signal(SIGINT, [](int signum) {
     PLOGI << "Exit on sigint " << signum;
     is_main_running = false;
   });
@@ -42,9 +41,9 @@ int main(int argc, char **argv) {
   auto plugin_manager = std::make_shared<PluginManager>();
   auto service_manager = std::make_shared<ServiceManager>();
 
-  // Load
-  std::shared_ptr<CoreContext> context = std::make_shared<CoreContext>(
-      plog::get(), event_server, service_manager, plugin_manager, squidbot_lib_dir);
+  std::shared_ptr<CoreContext> context =
+      std::make_shared<CoreContext>(plog::get(), event_server, service_manager,
+                                    plugin_manager, squidbot_lib_dir);
 
   PLOGI << "Starting Event Server";
   event_server->start();
@@ -61,10 +60,11 @@ int main(int argc, char **argv) {
 
   // Main Loop
   std::cout << "Running..." << std::endl;
-  while (is_main_running) { pause(); }
+  while (is_main_running) {
+    pause();
+  }
   std::cout << std::endl; // courtesy newline
 
-  // Unload
   PLOGI << "Stopping Event Server";
   event_server->stop();
 

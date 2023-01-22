@@ -5,9 +5,11 @@ Copyright (C) 2023  Squidpie
 
 #pragma once
 
+#include <memory>
+
+#include "core/corelib.h"
 #include "mockservice/events.h"
 #include "mockservice/version.h"
-#include "corelib.h"
 
 class MockServiceData : virtual public ServiceDataBase {
 public:
@@ -17,7 +19,7 @@ public:
 class MockServicePluginInterface : virtual public ServiceInterfaceBase {
 public:
   MockServicePluginInterface() {}
-  MockServicePluginInterface(std::shared_ptr<MockServiceData> data)
+  explicit MockServicePluginInterface(std::shared_ptr<MockServiceData> data)
       : data(data) {}
   ~MockServicePluginInterface() {}
   void test();
@@ -45,7 +47,8 @@ public:
 class MockServiceRunAction : virtual public RunActionBase {
 public:
   typedef MockServiceRunActionContext context_t;
-  MockServiceRunAction(std::shared_ptr<MockServiceRunActionContext> context) {
+  explicit MockServiceRunAction(
+      std::shared_ptr<MockServiceRunActionContext> context) {
     event_client = context->event_client;
     mock_data = context->mock_data;
   }

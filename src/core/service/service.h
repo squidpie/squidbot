@@ -5,11 +5,13 @@ Copyright (C) 2023  Squidpie
 
 #pragma once
 
-#include "core.h"
-#include "event_server.h"
-#include "events.h"
+#include <memory>
+
+#include "core/core.h"
+#include "events/event_server.h"
+#include "events/events.h"
 #include "lib/core_context.h"
-#include "logging.h"
+#include "logging/logging.h"
 
 class ServiceInterfaceBase {
 public:
@@ -50,14 +52,21 @@ public:
   }
   ~Service() { stop(); }
 
-  void start() override { runner->start(); }
-  void stop() override { runner->stop(); }
+  void start() override {
+    runner->start();
+  }
+
+  void stop() override {
+    runner->stop();
+  }
 
   std::shared_ptr<ServiceInterfaceBase> get_interface() override {
     return std::make_shared<Pi>(data);
   }
 
-  const uint core_version() override { return S::core_version; }
+  const uint core_version() override {
+    return S::core_version;
+  }
 
   #ifdef _GTEST_COMPILE
   void inject(std::shared_ptr<Runner<R>> _runner, std::shared_ptr<D> _data) {

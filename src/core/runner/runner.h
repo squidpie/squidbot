@@ -9,10 +9,12 @@ Copyright (C) 2023  Squidpie
 #include <initializer_list>
 #include <iostream>
 #include <memory>
+// NOLINTNEXTLINE
 #include <mutex>
+// NOLINTNEXTLINE
 #include <thread>
 
-#include "logging.h"
+#include "logging/logging.h"
 
 class RunActionContextBase {
 public:
@@ -39,7 +41,7 @@ template <class R> class Runner : virtual public RunnerBase {
 public:
   typedef typename R::context_t Rc;
   Runner() {}
-  Runner(std::shared_ptr<Rc> context) {
+  explicit Runner(std::shared_ptr<Rc> context) {
     run_action = std::make_shared<R>(context);
   }
   ~Runner() { stop(); }

@@ -5,8 +5,12 @@ Copyright (C) 2023  Squidpie
 
 #pragma once
 
-#include "core.h"
-#include "service_loader.h"
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "core/core.h"
+#include "service/service_loader.h"
 #include "utils/lib_loader.h"
 
 class ServiceManagerBase {
@@ -27,9 +31,10 @@ public:
   Caller must check for nullptr
    */
   template <class T>
-  std::shared_ptr<typename T::plugin_interface_t> get_interface(const uint plugin_version) {
+  std::shared_ptr<typename T::plugin_interface_t>
+  get_interface(const uint plugin_version) {
     if (plugin_version != T::service_version) {
-      // LOG ERROR
+      PLOGE << "::PLUGIN VERSION MISMATCH::";
       return nullptr;
     }
     return std::dynamic_pointer_cast<typename T::plugin_interface_t>(

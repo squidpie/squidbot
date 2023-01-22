@@ -3,7 +3,7 @@ factory.cpp
 Copyright (C) 2023  Squidpie
  */
 
-#include "admin.h"
+#include "admin/admin.h"
 
 // Factory
 extern "C" void create(std::string lib_path, std::shared_ptr<Context> context) {

@@ -3,8 +3,12 @@ pluginmanager.cpp
 Copyright (C) 2023  Squidpie
  */
 
-#include "pluginmanager.h"
-#include "plugin.h"
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "plugin/plugin.h"
+#include "plugin/pluginmanager.h"
 
 void PluginManager::load(std::shared_ptr<CoreContext> context) {
   PLOGD << "Loading";

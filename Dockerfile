@@ -2,7 +2,7 @@
 # Copyright (C) 2023 Squidpie
 
 # syntax=docer/dockerfile:1
-FROM debian:latest
+FROM debian:bullseye
 WORKDIR /squidbot
 RUN mkdir lib
 COPY ./targets/debug/bin/squidbot /squidbot/bin/squidbot

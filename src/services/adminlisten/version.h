@@ -7,4 +7,4 @@ Copyright (C) 2023  Squidpie
 
 #include <sys/types.h>
 
-const uint ADMINLISTEN_VERSION {0};
+const uint ADMINLISTEN_VERSION{0};

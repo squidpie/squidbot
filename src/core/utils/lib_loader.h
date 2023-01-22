@@ -10,8 +10,10 @@ Copyright (C) 2023  Squidpie
 #include <iostream>
 #include <stdexcept>
 #include <unordered_map>
+#include <memory>
+#include <string>
 
-#include "logging.h"
+#include "logging/logging.h"
 #include "utils/context.h"
 
 namespace fs = std::filesystem;
@@ -22,11 +24,11 @@ template <class L> class LibLoader {
 public:
   typedef typename L::create_t create_t;
 
-  LibLoader(std::shared_ptr<Context> context) : context(context) {
+  explicit LibLoader(std::shared_ptr<Context> context) : context(context) {
     load_all(context->lib_dir + std::string(L::lib));
   }
   ~LibLoader() {
-    for (const auto& [key, handle] : libs) {
+    for (const auto &[key, handle] : libs) {
       PLOGD << "Closing handle " << key;
       dlclose(handle);
     }
@@ -85,5 +87,5 @@ public:
 
 protected:
   std::shared_ptr<Context> context;
-  std::unordered_map<std::string, void*> libs;
+  std::unordered_map<std::string, void *> libs;
 };
