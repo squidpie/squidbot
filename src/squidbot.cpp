@@ -22,6 +22,12 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
+  if (argc > 0) {
+    if (std::string(argv[1]) == "--test") {
+      is_main_running = false;
+    }
+  }
+
   plog::init(plog::debug, "squidbot.log");
   plog_shared_init(plog::debug, plog::get(), squidbot_lib_dir);
   PLOGI << "Logging Initialized";
