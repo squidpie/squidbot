@@ -5,7 +5,7 @@ Copyright (C) 2023  Squidpie
 
 #include <gtest/gtest.h>
 
-#include "mock_core.h"
+#include "core/mock_core.h"
 #include "mockplugin/mockplugin.h"
 #include "mockservice/mockservice.h"
 #include "utils/defines.h"

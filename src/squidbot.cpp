@@ -4,10 +4,10 @@
         Copyright (C) 2023  Squidpie
 */
 
-#include <signal.h>
+#include <csignal>
 
-#include "corelib.h"
-#include "logging.h"
+#include "core/corelib.h"
+#include "logging/logging.h"
 #include "utils/defines.h"
 
 #include "admin/admin.h"
@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
   while (is_main_running) {
     pause();
   }
-  std::cout << std::endl; // courtesy newline
+  std::cout << std::endl;  // courtesy newline
 
   PLOGI << "Stopping Event Server";
   event_server->stop();

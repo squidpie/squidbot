@@ -7,6 +7,5 @@ Copyright (C) 2023  Squidpie
 
 #include <string>
 
-const char LIB_DIR[] =
-    "/home/squidpie/Repos/squidbot/targets/release/lib/";
+const char LIB_DIR[] = "/home/squidpie/Repos/squidbot/targets/release/lib/";
 const char TEST_LIB_DIR[] = "targets/debug/test/lib/";

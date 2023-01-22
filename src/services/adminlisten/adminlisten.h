@@ -5,17 +5,19 @@ Copyright (C) 2023 Squidpie
 
 #pragma once
 
+#include <memory>
+
 #include "adminlisten/events.h"
 #include "adminlisten/version.h"
 #include "core/corelib.h"
 
 class AdminListenData : virtual public ServiceDataBase {
-public:
+ public:
   ~AdminListenData() {}
 };
 
 class AdminListenRunActionContext : virtual public RunActionContextBase {
-public:
+ public:
   AdminListenRunActionContext(std::shared_ptr<EventClientBase> event_client,
                               std::shared_ptr<AdminListenData> data)
       : event_client(event_client), data(data) {}
@@ -25,7 +27,7 @@ public:
 };
 
 class AdminListenRunAction : virtual public RunActionBase {
-public:
+ public:
   typedef AdminListenRunActionContext context_t;
   explicit AdminListenRunAction(
       std::shared_ptr<AdminListenRunActionContext> context)
@@ -33,29 +35,28 @@ public:
   ~AdminListenRunAction() {}
   void run_action();
 
-protected:
+ protected:
   std::shared_ptr<EventClientBase> event_client;
   std::shared_ptr<AdminListenData> data;
 };
 
 class AdminListenPluginInterface : virtual public ServiceInterfaceBase {
-public:
-  explicit AdminListenPluginInterface(
-      std::shared_ptr<AdminListenData> data)
+ public:
+  explicit AdminListenPluginInterface(std::shared_ptr<AdminListenData> data)
       : data(data) {}
   ~AdminListenPluginInterface() {}
 
-protected:
+ protected:
   std::shared_ptr<AdminListenData> data;
 };
 
 class AdminListenExternalInterface : virtual public ServiceInterfaceBase {
-public:
+ public:
   ~AdminListenExternalInterface() {}
 };
 
 class AdminListen {
-public:
+ public:
   typedef AdminListenRunAction run_action_t;
   typedef AdminListenData data_t;
   typedef AdminListenPluginInterface plugin_interface_t;

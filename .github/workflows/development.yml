@@ -24,6 +24,13 @@ jobs:
         with:
           fetch-depth: 0
 
+     - name: "🔍 linter"
+       uses: github/super-linter@v4
+       env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: "dev"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: "🔧 build squidbot"
         run: |
           cmake -DCMAKE_BUILD_TYPE=Debug -S. -B./targets/debug
@@ -31,16 +38,9 @@ jobs:
 
       - name: "🔧 build docker"
         run: docker build -t squidbot .
-      
-      - name: "🔍 linter"
-        uses: github/super-linter@v4
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: "dev"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: "🔍 squidtest"
         run: ./targets/debug/bin/squidtest
-        
+
       - name: "🔍 docker test"
         run: docker run squidbot:latest

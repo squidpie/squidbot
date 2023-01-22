@@ -5,13 +5,13 @@ Copyright (C) 2023  Squidpie
 
 #pragma once
 
-#include <dlfcn.h>
+#include "dlfcn.h"
 #include <filesystem>
 #include <iostream>
-#include <stdexcept>
-#include <unordered_map>
 #include <memory>
+#include <stdexcept>
 #include <string>
+#include <unordered_map>
 
 #include "logging/logging.h"
 #include "utils/context.h"
@@ -21,7 +21,7 @@ namespace fs = std::filesystem;
 class LoadLibError : public std::runtime_error {};
 
 template <class L> class LibLoader {
-public:
+ public:
   typedef typename L::create_t create_t;
 
   explicit LibLoader(std::shared_ptr<Context> context) : context(context) {
@@ -85,7 +85,7 @@ public:
     libs.insert({lib_path, handle});
   }
 
-protected:
+ protected:
   std::shared_ptr<Context> context;
   std::unordered_map<std::string, void *> libs;
 };

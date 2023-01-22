@@ -14,7 +14,7 @@ Copyright (C) 2023  Squidpie
 #include "utils/lib_loader.h"
 
 class ServiceManagerBase {
-public:
+ public:
   virtual ~ServiceManagerBase() {}
   virtual void load(std::shared_ptr<CoreContext>) = 0;
   virtual void unload() = 0;
@@ -50,7 +50,7 @@ public:
     _reload(std::make_shared<std::type_index>(typeid(S)));
   }
 
-protected:
+ protected:
   virtual void _register_service(
       std::type_index,
       std::pair<std::string, std::shared_ptr<ServiceBase>>) = 0;
@@ -62,7 +62,7 @@ protected:
 
 class ServiceManager : virtual public ServiceManagerBase,
                        public std::enable_shared_from_this<ServiceManager> {
-public:
+ public:
   ServiceManager() {}
   ~ServiceManager() {}
 
@@ -80,7 +80,7 @@ public:
   void inject(auto _services) { services = _services; }
 #endif
 
-protected:
+ protected:
   std::shared_ptr<CoreContext> context;
   std::shared_ptr<ServiceMap_t> services = std::make_shared<ServiceMap_t>();
   std::unique_ptr<LibLoader<ServiceLoader>> libloader;
