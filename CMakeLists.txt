@@ -2,7 +2,7 @@
 # Copyright (C) 2023  Squidpie
 
 cmake_minimum_required(VERSION 3.25)
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -fPIC -fsanitize=address")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -fPIC")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -fPIC")
 
 project(Squidbot
@@ -42,11 +42,11 @@ include_directories(
 
 add_subdirectory(src)
 add_subdirectory(src/core)
-#add_subdirectory(src/services/obs)
-add_subdirectory(src/services/mockservice)
-add_subdirectory(src/plugins/mockplugin)
+add_subdirectory(src/services/adminlisten)
 add_subdirectory(src/plugins/admin)
 add_subdirectory(src/logging/logger)
+add_subdirectory(src/services/mockservice)
+add_subdirectory(src/plugins/mockplugin)
 
 # Google Test Stuff
 FetchContent_Declare(
@@ -106,9 +106,9 @@ target_link_libraries(
 set_target_properties(
     squidtest
     PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/lib/"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/lib/"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/bin/"
     EXCLUDE_FROM_ALL True)
 
 target_compile_definitions(

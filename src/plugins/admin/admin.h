@@ -5,31 +5,31 @@ Copyright (C) 2023  Squidpie
 
 #pragma once
 
-#include "corelib.h"
-#include "mockservice/mockservice.h"
+#include "core/corelib.h"
+#include "adminlisten/adminlisten.h"
 
 class AdminAction : virtual public PluginActionBase {
-public:
+ public:
   AdminAction(InterfaceMap_t *interfaces, std::shared_ptr<PluginDataBase>);
   ~AdminAction() {}
   void trigger_action(Event) override;
 
-protected:
+ protected:
   InterfaceMap_t *interfaces;
-  std::shared_ptr<MockServicePluginInterface> mockservice;
+  std::shared_ptr<AdminListenPluginInterface> adminlisten;
 };
 
 class AdminFilter : virtual public PluginFilterBase {
-public:
+ public:
   ~AdminFilter() {}
   bool is_trigger(Event) override;
 };
 
 class Admin {
-public:
+ public:
   typedef AdminAction action_t;
   typedef AdminFilter filter_t;
-  Admin(std::shared_ptr<EventClientBase>) {}
+  explicit Admin(std::shared_ptr<EventClientBase>) {}
   ~Admin() {}
   InterfaceMap_t create_interfaces(std::shared_ptr<CoreContext>);
   static const uint core_version{CORE_VERSION};

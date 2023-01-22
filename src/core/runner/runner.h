@@ -9,8 +9,12 @@ Copyright (C) 2023  Squidpie
 #include <initializer_list>
 #include <iostream>
 #include <memory>
+// NOLINTNEXTLINE
 #include <mutex>
+// NOLINTNEXTLINE
 #include <thread>
+
+#include "logging/logging.h"
 
 class RunActionContextBase {
 public:
@@ -37,20 +41,23 @@ template <class R> class Runner : virtual public RunnerBase {
 public:
   typedef typename R::context_t Rc;
   Runner() {}
-  Runner(std::shared_ptr<Rc> context) {
+  explicit Runner(std::shared_ptr<Rc> context) {
     run_action = std::make_shared<R>(context);
   }
   ~Runner() { stop(); }
 
   void start() {
+    PLOGD << "Runner start";
     set_running(true);
     thread_handle = std::make_unique<std::thread>(&Runner::thread_loop, this);
   }
 
   void stop() {
     set_running(false);
-    if (thread_handle)
+    if (thread_handle) {
+      PLOGD << "Stopping thread_loop";
       thread_handle->join();
+    }
     thread_handle.reset();
   }
 
@@ -60,6 +67,7 @@ public:
 
 private:
   void thread_loop() {
+    PLOGD << "Starting thread_loop";
     while (is_running()) {
       run_action->run_action();
     }

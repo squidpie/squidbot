@@ -5,35 +5,37 @@ Copyright (C) 2023  Squidpie
 
 #pragma once
 
-#include "./events.h"
-#include "./version.h"
-#include "corelib.h"
+#include <memory>
+
+#include "core/corelib.h"
+#include "mockservice/events.h"
+#include "mockservice/version.h"
 
 class MockServiceData : virtual public ServiceDataBase {
-public:
+ public:
   ~MockServiceData() {}
 };
 
 class MockServicePluginInterface : virtual public ServiceInterfaceBase {
-public:
+ public:
   MockServicePluginInterface() {}
-  MockServicePluginInterface(std::shared_ptr<MockServiceData> data)
+  explicit MockServicePluginInterface(std::shared_ptr<MockServiceData> data)
       : data(data) {}
   ~MockServicePluginInterface() {}
   void test();
 
-protected:
+ protected:
   std::shared_ptr<MockServiceData> data;
   uint count{0};
 };
 
 class MockServiceExternalInterface : virtual public ServiceInterfaceBase {
-public:
+ public:
   ~MockServiceExternalInterface() {}
 };
 
 class MockServiceRunActionContext : virtual public RunActionContextBase {
-public:
+ public:
   MockServiceRunActionContext(std::shared_ptr<EventClientBase> event_client,
                               std::shared_ptr<MockServiceData> mock_data)
       : event_client(event_client), mock_data(mock_data) {}
@@ -43,21 +45,22 @@ public:
 };
 
 class MockServiceRunAction : virtual public RunActionBase {
-public:
+ public:
   typedef MockServiceRunActionContext context_t;
-  MockServiceRunAction(std::shared_ptr<MockServiceRunActionContext> context) {
+  explicit MockServiceRunAction(
+      std::shared_ptr<MockServiceRunActionContext> context) {
     event_client = context->event_client;
     mock_data = context->mock_data;
   }
   void run_action();
 
-protected:
+ protected:
   std::shared_ptr<EventClientBase> event_client;
   std::shared_ptr<MockServiceData> mock_data;
 };
 
 class MockService {
-public:
+ public:
   typedef MockServiceRunAction run_action_t;
   typedef MockServicePluginInterface plugin_interface_t;
   typedef MockServiceExternalInterface external_interface_t;

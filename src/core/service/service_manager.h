@@ -5,12 +5,16 @@ Copyright (C) 2023  Squidpie
 
 #pragma once
 
-#include "core.h"
-#include "service_loader.h"
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "core/core.h"
+#include "service/service_loader.h"
 #include "utils/lib_loader.h"
 
 class ServiceManagerBase {
-public:
+ public:
   virtual ~ServiceManagerBase() {}
   virtual void load(std::shared_ptr<CoreContext>) = 0;
   virtual void unload() = 0;
@@ -18,6 +22,7 @@ public:
   template <class S>
   void register_service(std::string lib_path,
                         std::shared_ptr<ServiceBase> service) {
+    PLOGD << "Registering Service " << lib_path;
     _register_service(std::type_index(typeid(S)),
                       std::make_pair(lib_path, service));
   }
@@ -26,9 +31,10 @@ public:
   Caller must check for nullptr
    */
   template <class T>
-  std::shared_ptr<typename T::plugin_interface_t> get_interface(const uint plugin_version) {
+  std::shared_ptr<typename T::plugin_interface_t>
+  get_interface(const uint plugin_version) {
     if (plugin_version != T::service_version) {
-      // LOG ERROR
+      PLOGE << "::PLUGIN VERSION MISMATCH::";
       return nullptr;
     }
     return std::dynamic_pointer_cast<typename T::plugin_interface_t>(
@@ -44,7 +50,7 @@ public:
     _reload(std::make_shared<std::type_index>(typeid(S)));
   }
 
-protected:
+ protected:
   virtual void _register_service(
       std::type_index,
       std::pair<std::string, std::shared_ptr<ServiceBase>>) = 0;
@@ -56,7 +62,7 @@ protected:
 
 class ServiceManager : virtual public ServiceManagerBase,
                        public std::enable_shared_from_this<ServiceManager> {
-public:
+ public:
   ServiceManager() {}
   ~ServiceManager() {}
 
@@ -74,7 +80,7 @@ public:
   void inject(auto _services) { services = _services; }
 #endif
 
-protected:
+ protected:
   std::shared_ptr<CoreContext> context;
   std::shared_ptr<ServiceMap_t> services = std::make_shared<ServiceMap_t>();
   std::unique_ptr<LibLoader<ServiceLoader>> libloader;

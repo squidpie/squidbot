@@ -5,7 +5,7 @@ Copyright (C) 2023  Squidpie
 
 #include <gtest/gtest.h>
 
-#include "mock_core.h"
+#include "core/mock_core.h"
 #include "mockplugin/mockplugin.h"
 #include "mockservice/mockservice.h"
 #include "utils/defines.h"
@@ -43,9 +43,10 @@ protected:
         .WillOnce(testing::Return(interface));
     dut->load(context);
 
+    std::string lib_path = TEST_LIB_DIR;
+    lib_path += "/plugins/libmockplugin.so";
     EXPECT_EQ(plugins->size(), 1);
-    EXPECT_EQ(plugins->at(std::type_index(typeid(MockPlugin))).first,
-              TEST_LIB_DIR + "/plugins/libmockplugin.so");
+    EXPECT_EQ(plugins->at(std::type_index(typeid(MockPlugin))).first, lib_path);
   }
 
   void TearDown() override { dut->unload(); }
@@ -80,8 +81,10 @@ TEST_F(PluginManagerTest, reload_plugin) {
   EXPECT_EQ(plugins->size(), 1);
   EXPECT_TRUE(plugins->find(std::type_index(typeid(MockPlugin))) !=
               plugins->end());
-  EXPECT_EQ(plugins->at(std::type_index(typeid(MockPlugin))).first,
-            TEST_LIB_DIR + "/plugins/libmockplugin.so");
+
+  std::string lib_path = TEST_LIB_DIR;
+  lib_path += "/plugins/libmockplugin.so";
+  EXPECT_EQ(plugins->at(std::type_index(typeid(MockPlugin))).first, lib_path);
 }
 
 TEST_F(PluginManagerTest, service_unload_notify) {

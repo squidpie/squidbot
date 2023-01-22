@@ -16,7 +16,7 @@ on:
 jobs:
   test:
     name: Squidtest
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     timeout-minutes: 10
     steps:
       - name: "☁️ checkout"
@@ -24,17 +24,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: "🔧 build"
+      - name: "🔧 build squidbot"
         run: |
           cmake -DCMAKE_BUILD_TYPE=Debug -S. -B./targets/debug
-          cmake --build ./targets/debug -j32 --target squidtest
+          cmake --build ./targets/debug -j32 --target all squidtest
 
-      - name: "🔍 linter"
-        uses: github/super-linter@v4
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: "dev"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: "🔍 test"
-        run: ./targets/debug/bin/squidtest
+      - name: "🔧 build docker"
+        run: docker build -t squidbot --build-arg build_dir=./targets/debug/ .
+
+      - name: "🔍 run squidtest"
+        run: ./targets/debug/test/bin/squidtest
+
+      - name: "🔍 run docker test"
+        run: docker run squidbot:latest /squidbot/bin/squidbot --test

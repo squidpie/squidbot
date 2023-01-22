@@ -14,8 +14,8 @@ target_link_libraries(
 set_target_properties(
     mockplugin
     PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/plugins"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/lib/"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/lib/plugins"
     EXCLUDE_FROM_ALL True)
 
 set(MOCKPLUGIN_SOURCES ${CMAKE_SOURCE_DIR}/src/plugins/mockplugin/mockplugin.cpp PARENT_SCOPE)
