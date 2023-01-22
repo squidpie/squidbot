@@ -106,9 +106,9 @@ target_link_libraries(
 set_target_properties(
     squidtest
     PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/lib/"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/lib/"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/bin/"
     EXCLUDE_FROM_ALL True)
 
 target_compile_definitions(

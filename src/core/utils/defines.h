@@ -8,4 +8,4 @@ Copyright (C) 2023  Squidpie
 #include <string>
 
 const std::string LIB_DIR = "/home/squidpie/Repos/squidbot/targets/release/lib/";
-const std::string TEST_LIB_DIR = "targets/debug/lib/";
+const std::string TEST_LIB_DIR = "targets/debug/test/lib/";
