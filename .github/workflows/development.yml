@@ -24,23 +24,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: "🔍 linter"
-        uses: github/super-linter@v4
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: "dev"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: "🔧 build"
+      - name: "🔧 build squidbot"
         run: |
           cmake -DCMAKE_BUILD_TYPE=Debug -S. -B./targets/debug
           cmake --build ./targets/debug -j32 --target all squidtest
 
       - name: "🔧 build docker"
-        run: docker build -t squidbot .
+        run: docker build -t squidbot --build-arg build_dir=./targets/debug/ .
 
-      - name: "🔍 squidtest"
+      - name: "🔍 run squidtest"
         run: ./targets/debug/bin/squidtest
 
-      - name: "🔍 docker test"
-        run: docker run squidbot:latest
+      - name: "🔍 run docker test"
+        run: docker run squidbot:latest /squidbot/bin/squidbot --test

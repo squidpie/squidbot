@@ -21,8 +21,9 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  if (argc > 0) {
+  if (argc > 1) {
     if (std::string(argv[1]) == "--test") {
+      std::cout << "Executing Test Mode" << std::endl;
       is_main_running = false;
     }
   }
