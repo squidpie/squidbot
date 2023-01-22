@@ -30,7 +30,7 @@ jobs:
           cmake --build ./targets/debug -j32 --target all squidtest
 
       - name: "🔧 build docker"
-        run: docker build -t squidbot
+        run: docker build -t squidbot .
       
       - name: "🔍 linter"
         uses: github/super-linter@v4
