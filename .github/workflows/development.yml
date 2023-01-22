@@ -33,7 +33,7 @@ jobs:
         run: docker build -t squidbot --build-arg build_dir=./targets/debug/ .
 
       - name: "🔍 run squidtest"
-        run: ./targets/debug/bin/squidtest
+        run: ./targets/debug/test/bin/squidtest
 
       - name: "🔍 run docker test"
         run: docker run squidbot:latest /squidbot/bin/squidbot --test
