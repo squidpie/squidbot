@@ -17,4 +17,4 @@ set_target_properties(
   ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/"
   LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/services")
 
-set(ADMIN_LISTEN_SOURCE ${CMAKE_SOURCE_DIR}/src/services/adminlisten/adminlisten.cpp PARENT_SCOPE)
+set(ADMINLISTEN_SOURCES ${CMAKE_SOURCE_DIR}/src/services/adminlisten/adminlisten.cpp PARENT_SCOPE)

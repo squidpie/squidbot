@@ -18,6 +18,7 @@ public:
   template <class S>
   void register_service(std::string lib_path,
                         std::shared_ptr<ServiceBase> service) {
+    PLOGD << "Registering Service " << lib_path;
     _register_service(std::type_index(typeid(S)),
                       std::make_pair(lib_path, service));
   }

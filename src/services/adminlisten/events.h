@@ -7,10 +7,10 @@ Copyright (C) 2023  Squidpie
 
 #include "utils/uuid.h"
 
-const std::string ADMINLISTENNAMESPACE = "";
+const std::string ADMINLISTEN_NAMESPACE = "";
 
 struct AdminListenEvents {
-  uuid_t ADMIN_UPDATE_EVENT_TYPE = uuid(ADMINLISTENNAMESPACE + "ADMIN_UPDATE_EVENT_TYPE");
+  uuid_t ADMIN_UPDATE_EVENT_TYPE = uuid(ADMINLISTEN_NAMESPACE + "ADMIN_UPDATE_EVENT_TYPE");
 };
 
 static inline AdminListenEvents ADMIN_EVENTS;
