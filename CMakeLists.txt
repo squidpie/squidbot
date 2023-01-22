@@ -42,11 +42,11 @@ include_directories(
 
 add_subdirectory(src)
 add_subdirectory(src/core)
-#add_subdirectory(src/services/obs)
-add_subdirectory(src/services/mockservice)
-add_subdirectory(src/plugins/mockplugin)
+add_subdirectory(src/services/adminservice)
 add_subdirectory(src/plugins/admin)
 add_subdirectory(src/logging/logger)
+add_subdirectory(src/services/mockservice)
+add_subdirectory(src/plugins/mockplugin)
 
 # Google Test Stuff
 FetchContent_Declare(
