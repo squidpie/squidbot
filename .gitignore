@@ -51,6 +51,7 @@ _deps
 targets/
 *.log
 service-gen-output
+plugin-gen-output
 
 # External Libs
 external/
