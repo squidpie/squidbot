@@ -1,0 +1,59 @@
+# squidbot-staging.yml
+# Copyright (C) 2023
+# Squidpie
+
+name: squidbot-staging
+run-name: ${{ github.actor }} is staging squidbot for merge into prod
+on:
+  push:
+    branches:
+      - stage/*
+  workflow_dispatch: {}
+
+jobs:
+  staging:
+    name: squidbot-staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for validation
+        uses: lewagon/wait-on-check-action@v1.2.0
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'Validate squidbot'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.SQUIDBOT_DEPLOY_KEY }}
+          fetch-depth: 0
+
+      - name: Configure Git User
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.15
+        with:
+          versionSpec: '5.x'
+
+      - name: Resolve Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.15
+
+      - name: Fast-Forward Prod For Push
+        run: |
+          /usr/bin/git checkout prod
+          /usr/bin/git pull --ff-only origin ${{ github.ref }}
+
+      - name: Tag and Push
+        run: |
+          /usr/bin/git push origin prod
+          /usr/bin/git tag rc-${{ steps.gitversion.outputs.semVer }} -m "auto-tagged by staging"
+          /usr/bin/git push origin rc-${{ steps.gitversion.outputs.semVer }}
+
+      - name: Delete Staging Branch
+        run: |
+          /usr/bin/git push origin --delete ${{ github.ref }}

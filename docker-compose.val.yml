@@ -1,0 +1,22 @@
+# docker-compose.yml
+# Copyright (C) 2023
+# Squidpie
+
+version: "3.5"
+services:
+    redis:
+        image: redis:7.0.6-alpine
+        container_name: redis
+        networks:
+           - strauss-val
+        ports:
+           - "6379:6379"
+    voice:
+        networks:
+            - strauss-val
+
+
+
+networks:
+    strauss-val:
+        name: strauss-val

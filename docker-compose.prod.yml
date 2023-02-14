@@ -1,0 +1,9 @@
+# docker-compose.override.yml
+# Copyright (C) 2023
+# Squidpie
+
+version: "3.5"
+services:
+    voice:
+        image: ghcr.io/squidpie/voice:${SQUIDBOT_VOICE_PKG_VERSION}
+ 

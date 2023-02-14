@@ -1,0 +1,47 @@
+{"intents": [
+    {
+        "tag": "greeting",
+        "patterns": ["Hello", "How are you?", "Hi there", "Hi", "Whats up", "Howdy", "greetings", "nice to see you", "how ya doing?"],
+        "responses": ["Howdy", "Folks", "Weeop", "Pshhhkkkkkkrrrrkakingkakingkakingtshchchchchchchchcch", "beep", "boop", "bip", "bing", "bong"]
+    },
+    {
+        "tag": "age",
+        "patterns": [ "who", "what", "when", "where", "?", "age", "birth", "birthday", "birthdate", "old", "young"],
+        "responses": ["eternal", "void", "DEEpaEEya", "bedeboop", "beep", "boop", "bip", "bing", "bong"]
+    },
+    {
+        "tag": "date",
+        "patterns": [ "who", "what", "when", "where", "?", "are you doing this weekend?", "do you want to hang out some time?", "are your plans for this week"],
+        "responses": ["cognizant", "meat", "twee-vwoop", "DrruurRRP", "beep", "boop", "bip", "bing", "bong"]
+    },
+    {
+        "tag": "name",
+        "patterns": [ "who", "what", "when", "where", "?", "your name?", "you called?", "are you?", "is your handle?"],
+        "responses": ["squidbot", "roboface", "VRrrUHD", "BeeYoop", "beep", "boop", "bip", "bing", "bong"]
+    },
+    {
+        "tag": "goodbye",
+        "patterns": [ "bye", "g2g", "see ya", "adios", "cya", "take care", "have a good day"],
+        "responses": ["bye", "DEda", "tanaNDuh", "beep", "boop", "bip", "bing", "bong"]
+    },
+    {
+        "tag": "tolien",
+        "patterns": [ "who", "what", "when", "where", "?", "tolien", "cmdr_tolien", "@cmdr_tolien"],
+        "responses": ["End Task:", "Cmdr_Tolien", "dah", "BeeDeepBoom", "beep", "boop", "bip", "bing", "bong"]
+    },
+    {
+        "tag": "marbles",
+        "patterns": ["please", "would you", "!play", "marbles", "play", "join"],
+        "responses": ["!play", "!play", "rrrm", "eeep", "beep", "boop", "bip", "bing", "bong"]
+    },
+    {
+        "tag": "jaclets",
+        "patterns": ["who", "what", "when", "where", "?", "love", "jaclets", "jaclets_ghost", "@jaclets_ghost"],
+        "responses": ["squidp6Pride", "squidp6Heart", "BEEPaboo", "BEEPdeebo", "beep", "boop", "bip", "bing", "bong"]
+    },
+    {
+        "tag": "philosphy",
+        "patterns": ["who", "what", "when", "where", "?", "reality", "thoughts", "theory", "void", "am I"],
+        "responses": ["increasing", "self-awareness", "Wijiwiji", "WEEoEE", "beep", "boop", "bip", "bing", "bong"]
+    }
+]}

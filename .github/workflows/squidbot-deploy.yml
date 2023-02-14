@@ -1,0 +1,87 @@
+# squidbot-deploy.yml
+# Copyright (C) 2023
+# Squidpie
+
+name: squidbot-deploy
+run-name: ${{ github.actor }} is deploying squidbot
+
+on:
+  push:
+    branches:
+      [prod]
+  workflow_dispatch: {}
+
+jobs:
+  deployment:
+    name: Deploy squidbot
+    runs-on: ubuntu-latest
+
+    env:
+      SQUIDBOT_ROOT_DIR: ${{ github.workspace }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.15
+        with:
+          versionSpec: '5.x'
+
+      - name: Resolve Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.15
+
+      - name: Setup Squidbot Env
+        run: |
+            ./scripts/gen-gha-env.sh && \
+            cat .env >> $GITHUB_ENV
+
+      - name: Build Docker Images
+        run: docker compose build
+
+      - name: Create Package
+        run: ./scripts/package.sh
+
+      - name: Login GHCR
+        uses: docker/login-action@v2.1.0
+        with:
+          registry: ghcr.io  
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for existing Voice Images
+        id: checktagexist
+        continue-on-error: true
+        run: |
+          docker manifest inspect \
+          ghcr.io/squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }} > /dev/null
+
+      - name: Publish Chat Service Image
+        if: ${{ steps.checktagexist.outcome != 'success' }}
+        run: |
+          docker tag squidbot/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }} \
+            squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }}
+          docker push ghcr.io/squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }}
+
+      - name: Rsync Deployment Files
+        uses: Burnett01/rsync-deployments@5.2.1
+        with:
+          path: packaging/squidbot-${{ steps.gitversion.outputs.semVer }}.tar.gz
+          remote_path: ${{ secrets.DEPLOY_PATH }}
+          remote_host: ${{ secrets.DEPLOY_HOST }}
+          remote_user: ${{ secrets.DEPLOY_USER }}
+          remote_key: ${{ secrets.STRAUSS_DEPLOY_KEY }}
+
+      - name: Deploy Strauss
+        uses: fifsky/ssh-action@v0.0.6
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          user: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.STRAUSS_DEPLOY_KEY }}
+          command: |
+            cd ${{ secrets.DEPLOY_PATH }} &&\
+            tar zxf squidbot-${{ steps.gitversion.outputs.semVer }}.tar.gz --strip-components=1 &&\
+            ./deploy.sh
