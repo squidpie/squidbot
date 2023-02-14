@@ -19,11 +19,11 @@ jobs:
     name: Validate squidbot
     runs-on: ubuntu-latest
 
-    services:
-        redis:
-            image: redis:7.0.6-alpine
-            ports:
-                - "6379:6379"
+    #services:
+    #    redis:
+    #        image: redis:7.0.6-alpine
+    #        ports:
+    #            - "6379:6379"
     env:
         SQUIDBOT_ROOT_DIR: ${{ github.workspace }}
         
@@ -52,7 +52,7 @@ jobs:
         run: ./scripts/gen-gha-env.sh
 
       - name: Run Squidbot
-        run: docker compose up -d
+        run: docker compose -f docker-compose.yml -f docker-compose.val.yml up -d
 
       - name: Run Voice Integration Test
         run: bundle exec tests/voice/run.rb
