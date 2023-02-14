@@ -63,7 +63,7 @@ jobs:
         if: ${{ steps.checktagexist.outcome != 'success' }}
         run: |
           docker tag squidbot/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }} \
-            squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }}
+            ghcr.io/squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }}
           docker push ghcr.io/squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }}
 
       - name: Rsync Deployment Files
