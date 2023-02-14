@@ -8,15 +8,11 @@ services:
         image: redis:7.0.6-alpine
         container_name: redis
         networks:
-           - strauss-val
+           - strauss
         ports:
            - "6379:6379"
-    voice:
-        networks:
-            - strauss-val
-
-
 
 networks:
-    strauss-val:
-        name: strauss-val
+    strauss:
+        name: strauss
+        external: false
