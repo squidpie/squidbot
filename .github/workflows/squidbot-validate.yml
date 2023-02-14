@@ -52,7 +52,7 @@ jobs:
         run: ./scripts/gen-gha-env.sh
 
       - name: Run Squidbot
-        run: docker compose -f docker-compose.yml -f docker-compose.val.yml up -d
+        run: docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.val.yml up -d
 
       - name: Run Voice Integration Test
         run: bundle exec tests/voice/run.rb
