@@ -1,0 +1,12 @@
+# docker-compose.override.yml
+# Copyright (C) 2023
+# Squidpie
+
+version: "3.5"
+services:
+    voice:
+        image: squidbot/voice:${SQUIDBOT_VOICE_PKG_VERSION}
+        build:
+            context: ${SQUIDBOT_ROOT_DIR}
+            dockerfile: services/voice/Dockerfile
+ 

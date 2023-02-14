@@ -1,0 +1,14 @@
+# docker-compose.yml
+# Copyright (C) 2023
+# Squidpie
+
+version: "3.5"
+services:
+    voice:
+        container_name: voice
+        networks:
+            - strauss
+
+networks:
+    strauss:
+        external: true

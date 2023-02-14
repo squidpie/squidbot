@@ -1,0 +1,46 @@
+# squidbot-start-staging.yml
+# Copyright (C) 2023
+# Squidpie
+
+name: squidbot-start-staging
+run-name: ${{ github.actor }} is creating a staging branch
+on:
+  push:
+    branches:
+      [dev]
+  workflow_dispatch: {}
+
+jobs:
+  staging:
+    name: squidbot-start-staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.SQUIDBOT_DEPLOY_KEY }}
+          fetch-depth: 0
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.15
+        with:
+          versionSpec: '5.x'
+
+      - name: Resolve Version
+        id: gitversioncurrent
+        uses: gittools/actions/gitversion/execute@v0.9.15
+
+      - name: Step Back One Commit
+        run: git checkout HEAD~1
+
+      - name: Resolve Version
+        id: gitversionlast
+        uses: gittools/actions/gitversion/execute@v0.9.15
+
+      - name: Stage Prod Branch
+        if: steps.gitversionlast.outputs.majorMinorPatch != steps.gitversioncurrent.outputs.majorMinorPatch
+        run: |
+          /usr/bin/git checkout prod
+          /usr/bin/git checkout -b stage/${{ steps.gitversioncurrent.outputs.semVer }}
+          /usr/bin/git pull --ff-only origin dev
+          /usr/bin/git push origin stage/${{ steps.gitversioncurrent.outputs.semVer }}

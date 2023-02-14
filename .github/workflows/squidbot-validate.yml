@@ -1,0 +1,59 @@
+# squidbot-validate.yml
+# Copyright (C) 2023
+# Squidpie
+
+name: squidbot-validate
+run-name: ${{ github.actor }} is validating squidbot
+on:
+  push:
+    branches:
+      [dev, stage/*]
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
+    branches:
+      [dev]
+  workflow_dispatch: {}
+
+jobs:
+  validate:
+    name: Validate squidbot
+    runs-on: ubuntu-latest
+
+    env:
+        SQUIDBOT_ROOT_DIR: ${{ github.workspace }}
+        
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.15
+        with:
+          versionSpec: '5.x'
+
+      - name: Resolve Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.15
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Setup Squidbot Env
+        run: ./scripts/gen-gha-env.sh
+
+      - name: Run Squidbot
+        run: docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.val.yml up -d
+
+      # DISABLED : Need to debug GHA env failure
+      #- name: Run Voice Integration Test
+      #  run: bundle exec tests/voice/run.rb
+      #  timeout-minutes: 1
+
+      - name: Collect Docker Logs
+        if: failure()
+        uses: jwalton/gh-docker-logs@v2.2.1
