@@ -6,6 +6,8 @@
 require 'redis'
 require 'json'
 
+$stdout.sync = true
+
 $rx = "#strauss-chat-msg-rx";
 $tx = "#strauss-chat-msg-tx";
 $msg_hash={"sender"=>"test_user", "message_text"=>"@squidbot_roboface 0xdeadbeef"};
@@ -43,7 +45,7 @@ def publisher(redis)
 end
 
 client = Thread.new { client(redis) }
-sleep(0.1)
+sleep(1)
 publisher = Thread.new { publisher(redis) }
 publisher.join()
 client.join()
