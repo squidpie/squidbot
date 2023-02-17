@@ -1,0 +1,17 @@
+# squidbot-build.release.yml
+# Copyright (C) 2023
+# Squidpie
+
+version: "3.5"
+services:
+    build:
+        image: rust:1.67.1-slim-bullseye
+        container_name: squidbot_rel_build
+        command:
+            - /bin/sh
+            - -c
+            - |
+                cd /build/
+                cargo build -r && cargo test
+        volumes:
+            - ${SQUIDBOT_ROOT_DIR}:/build/

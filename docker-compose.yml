@@ -9,6 +9,10 @@ services:
         networks:
             - strauss
 
+    txt_cmds:
+        container_name: txt_cmds
+        networks:
+            - strauss
 networks:
     strauss:
         external: true

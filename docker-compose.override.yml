@@ -3,10 +3,20 @@
 # Squidpie
 
 version: "3.5"
+
 services:
     voice:
         image: squidbot/voice:${SQUIDBOT_VOICE_PKG_VERSION}
         build:
             context: ${SQUIDBOT_ROOT_DIR}
             dockerfile: services/voice/Dockerfile
- 
+
+    txt_cmds:
+        image: squidbot/txt_cmds:${SQUIDBOT_TXTCMDS_PKG_VERSION}
+        build:
+            context: ${SQUIDBOT_ROOT_DIR}
+            dockerfile: services/txt_cmds/Dockerfile
+            args:
+                SQUIDBOT_BUILD_DIR: ${SQUIDBOT_BUILD_DIR}
+        volumes:
+            - ./services/txt_cmds/txt_cmds.yml:/txt_cmds/txt_cmds.yml

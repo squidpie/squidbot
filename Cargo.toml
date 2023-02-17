@@ -1,0 +1,11 @@
+[workspace]
+members = ["services/txt_cmds", "lib"]
+default-members = ["services/txt_cmds", "lib"]
+
+[workspace.package]
+authors = ["Squidpie"]
+edition = "2021"
+
+[workspace.dependencies]
+lib = { path = "lib/" }
+strausslib = { path = "../strauss/lib" }

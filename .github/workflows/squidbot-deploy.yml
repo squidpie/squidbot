@@ -38,6 +38,9 @@ jobs:
         run: |
             ./scripts/gen-gha-env.sh && \
             cat .env >> $GITHUB_ENV
+ 
+      - name: Build & Unit Test Rust Services
+        run: docker compose -f squidbot-build.release.yml run build
 
       - name: Build Docker Images
         run: docker compose build
@@ -59,12 +62,27 @@ jobs:
           docker manifest inspect \
           ghcr.io/squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }} > /dev/null
 
-      - name: Publish Chat Service Image
+      - name: Publish Voice Image
         if: ${{ steps.checktagexist.outcome != 'success' }}
         run: |
           docker tag squidbot/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }} \
             ghcr.io/squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }}
           docker push ghcr.io/squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }}
+
+      - name: Check for existing TxtCmds Images
+        id: checktagexist
+        continue-on-error: true
+        run: |
+          docker manifest inspect \
+          ghcr.io/squidpie/txt_cmds:${{ env.SQUIDBOT_TXTCMDS_PKG_VERSION }} > /dev/null
+
+      - name: Publish TxtCmds Image
+        if: ${{ steps.checktagexist.outcome != 'success' }}
+        run: |
+          docker tag squidbot/txt_cmds:${{ env.SQUIDBOT_TXTCMDS_PKG_VERSION }} \
+            ghcr.io/squidpie/txt_cmds:${{ env.SQUIDBOT_TXTCMDS_PKG_VERSION }}
+          docker push ghcr.io/squidpie/txt_cmds:${{ env.SQUIDBOT_TXTCMDS_PKG_VERSION }}
+
 
       - name: Rsync Deployment Files
         uses: Burnett01/rsync-deployments@5.2.1
