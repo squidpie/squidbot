@@ -57,28 +57,28 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check for existing Voice Images
-        id: checktagexist
+        id: checkvoicetagexist
         continue-on-error: true
         run: |
           docker manifest inspect \
           ghcr.io/squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }} > /dev/null
 
       - name: Publish Voice Image
-        if: ${{ steps.checktagexist.outcome != 'success' }}
+        if: ${{ steps.checkvoicetagexist.outcome != 'success' }}
         run: |
           docker tag squidbot/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }} \
             ghcr.io/squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }}
           docker push ghcr.io/squidpie/voice:${{ env.SQUIDBOT_VOICE_PKG_VERSION }}
 
       - name: Check for existing TxtCmds Images
-        id: checktagexist
+        id: checktxtcmdstagexist
         continue-on-error: true
         run: |
           docker manifest inspect \
           ghcr.io/squidpie/txt_cmds:${{ env.SQUIDBOT_TXTCMDS_PKG_VERSION }} > /dev/null
 
       - name: Publish TxtCmds Image
-        if: ${{ steps.checktagexist.outcome != 'success' }}
+        if: ${{ steps.checktxtcmdstagexist.outcome != 'success' }}
         run: |
           docker tag squidbot/txt_cmds:${{ env.SQUIDBOT_TXTCMDS_PKG_VERSION }} \
             ghcr.io/squidpie/txt_cmds:${{ env.SQUIDBOT_TXTCMDS_PKG_VERSION }}
