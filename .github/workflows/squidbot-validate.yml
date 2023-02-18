@@ -21,6 +21,7 @@ jobs:
 
     env:
         SQUIDBOT_ROOT_DIR: ${{ github.workspace }}
+        SQUIDBOT_BUILD_DIR: targets/debug
         
     steps:
       - name: Checkout
@@ -54,7 +55,7 @@ jobs:
       
       - name: Run Squidbot
         run: |
-            docker compose --env-file .env \
+            docker compose \
             -f docker-compose.yml \
             -f docker-compose.override.yml \
             -f docker-compose.val.yml up -d
