@@ -11,6 +11,8 @@ services:
             - /bin/sh
             - -c
             - |
+                apt update
+                apt install pkg-config libssl-dev -y
                 cd /build/
                 cargo build -r && cargo test
         volumes:
