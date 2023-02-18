@@ -44,30 +44,25 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
-      - name: Setup Squidbot Env
-        run: ./scripts/gen-gha-env.sh
-
-      - name: Build & Unit Test Rust Services
-        run: docker compose -f squidbot-build.debug.yml run build
-
-      - name: Build Docker Images
-        run: docker compose build
-      
-      - name: Run Squidbot
+      - name: Build & Test
         run: |
+            ./scripts/gen-gha-env.sh
+            docker compose -f squidbot-build.debug.yml run build
+            docker compose build
             docker compose \
-            -f docker-compose.yml \
-            -f docker-compose.override.yml \
-            -f docker-compose.val.yml up -d
-
+                -f docker-compose.yml \
+                -f docker-compose.override.yml \
+                -f docker-compose.val.yml up -d
+            bundle exec tests/voice/run.rb
+            bundle exec tests/txt_cmds/run.rb
       # DISABLED : Need to debug GHA env failure
       #- name: Run Voice Integration Test
       #  run: bundle exec tests/voice/run.rb
       #  timeout-minutes: 1
 
-      - name: Run TxtCmd Integration Test
-        run: bundle exec tests/txt_cmds/run.rb
-        timeout-minutes: 1
+      #- name: Run TxtCmd Integration Test
+      #  run: bundle exec tests/txt_cmds/run.rb
+      #  timeout-minutes: 1
 
       - name: Collect Docker Logs
         if: failure()
