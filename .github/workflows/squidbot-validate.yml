@@ -53,7 +53,11 @@ jobs:
         run: docker compose build
       
       - name: Run Squidbot
-        run: docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.val.yml up -d
+        run: |
+            docker compose --env-file .env \
+            -f docker-compose.yml \
+            -f docker-compose.override.yml \
+            -f docker-compose.val.yml up -d
 
       # DISABLED : Need to debug GHA env failure
       #- name: Run Voice Integration Test
