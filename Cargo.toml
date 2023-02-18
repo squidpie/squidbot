@@ -8,4 +8,5 @@ edition = "2021"
 
 [workspace.dependencies]
 lib = { path = "lib/" }
-strausslib = { path = "../strauss/lib" }
+strausslib = { git = "https://github.com/squidpie/strauss.git", branch = "prod" }
+# strausslib = { path = "../strauss/lib" }  # uncomment for local dev.
