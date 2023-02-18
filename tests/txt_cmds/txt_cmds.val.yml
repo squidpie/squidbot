@@ -1,0 +1,4 @@
+commands:
+    test:
+        cooldown: 1
+        response: "0xdeadbeef"

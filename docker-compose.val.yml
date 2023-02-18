@@ -6,11 +6,15 @@ version: "3.5"
 services:
     redis:
         image: redis:7.0.6-alpine
-        container_name: redis
+        container_name: squidbot-val-redis
         networks:
            - strauss
         ports:
            - "6379:6379"
+           
+    txt_cmds:
+        volumes:
+            - ./tests/txt_cmds/txt_cmds.val.yml:/txt_cmds/txt_cmds.yml
 
 networks:
     strauss:

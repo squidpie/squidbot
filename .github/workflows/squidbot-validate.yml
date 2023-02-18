@@ -21,6 +21,7 @@ jobs:
 
     env:
         SQUIDBOT_ROOT_DIR: ${{ github.workspace }}
+        SQUIDBOT_BUILD_DIR: target/debug
         
     steps:
       - name: Checkout
@@ -43,17 +44,22 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
-      - name: Setup Squidbot Env
-        run: ./scripts/gen-gha-env.sh
+      - name: Build
+        run: |
+            ./scripts/gen-gha-env.sh
+            docker compose -f squidbot-build.debug.yml run build
+            docker compose build
 
-      - name: Run Squidbot
-        run: docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.val.yml up -d
-
-      # DISABLED : Need to debug GHA env failure
-      #- name: Run Voice Integration Test
-      #  run: bundle exec tests/voice/run.rb
-      #  timeout-minutes: 1
-
+      - name: Run Integration Tests
+        run: |
+            docker compose \
+                -f docker-compose.yml \
+                -f docker-compose.override.yml \
+                -f docker-compose.val.yml up -d
+            bundle exec tests/voice/run.rb
+            bundle exec tests/txt_cmds/run.rb
+        timeout-minutes: 5
+      
       - name: Collect Docker Logs
         if: failure()
         uses: jwalton/gh-docker-logs@v2.2.1

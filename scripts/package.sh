@@ -25,6 +25,9 @@ cp .env ${RelPath}/
 # Copy deploy script
 cp scripts/deploy.sh ${RelPath}/
 
+# Copy txt_cmds config
+cp services/txt_cmds/txt_cmds.yml ${RelPath}/
+
 # Create Package & Cleanup
 tar czf ${RelPath}.tar.gz -C packaging ${RelName}
 rm -r ${RelPath}/

@@ -1,0 +1,47 @@
+# txt_cmds.yml
+# Copyright (C) 2023
+# Squidpie
+commands:
+    lurk:
+        cooldown: 0
+        response: "/me prepares a comfy spot in the lurking cave for ya squidp6Lurk squidp6Lurk squidp6Lurk"
+
+    unlurk:
+        cooldown: 0
+        response: "Welcome back squidp6Heart"
+
+    pronouns:
+        cooldown: 30
+        response: "There is a very useful extension that will add your pronouns to chat, \
+        you don't have to install anything for people to see yours, and if you want to see other \
+        peoples pronouns you can install the extension at pronouns.alejo.io"
+
+    tarot:
+        cooldown: 10
+        response: "My tarot deck is made by Allison M. Garcia https://blindthesun.com/shop/tarot-deck"
+
+    battle:
+        cooldown: 10
+        response: "Partake in StreamRaiders by going to https://www.streamraiders.com/t/squidpie_meowface \
+        and placing units."
+
+    pirates:
+        cooldown: 10
+        response: "Join the pirate crew at https://www.streampirates.com/ and choosing squidpie_meowface \
+        as your captain"
+
+    nitro:
+        cooldown: 10
+        response: "Collect winnings and access your garage via game.playnitro.com"
+
+    ostriv:
+        cooldown: 10
+        response: "https://ostrivgame.com/home/"
+
+    rito:
+        cooldown: 5
+        response: ":bricks: :bricks: :bricks: :bricks: :bricks: :bricks:"
+
+    cal:
+        cooldown: 30
+        response: "Check out our industrialist friend Cap'n Cal at https://twitch.tv/cals_cavern"

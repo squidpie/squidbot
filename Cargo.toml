@@ -1,0 +1,12 @@
+[workspace]
+members = ["services/txt_cmds", "lib"]
+default-members = ["services/txt_cmds", "lib"]
+
+[workspace.package]
+authors = ["Squidpie"]
+edition = "2021"
+
+[workspace.dependencies]
+lib = { path = "lib/" }
+strausslib = { git = "https://github.com/squidpie/strauss.git", branch = "prod" }
+# strausslib = { path = "../strauss/lib" }  # uncomment for local dev.

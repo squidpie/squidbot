@@ -6,4 +6,9 @@ version: "3.5"
 services:
     voice:
         image: ghcr.io/squidpie/voice:${SQUIDBOT_VOICE_PKG_VERSION}
+    txt_cmds:
+        image: ghcr.io/squidpie/txt_cmds:${SQUIDBOT_TXTCMDS_PKG_VERSION}
+        volumes:
+            - ./txt_cmds.yml:/txt_cmds/txt_cmds.yml
+
  
