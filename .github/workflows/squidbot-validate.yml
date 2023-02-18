@@ -21,7 +21,7 @@ jobs:
 
     env:
         SQUIDBOT_ROOT_DIR: ${{ github.workspace }}
-        SQUIDBOT_BUILD_DIR: targets/debug
+        SQUIDBOT_BUILD_DIR: target/debug
         
     steps:
       - name: Checkout
